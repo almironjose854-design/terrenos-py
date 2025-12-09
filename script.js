@@ -1,29 +1,106 @@
-// script.js - Sistema principal con Gist
+// script.js - Sistema principal mejorado
+// Versión 3.1 - Sin errores de recursión
 
 // Variables globales
 let propiedades = [];
 let editandoId = null;
 let currentUser = null;
 
+// ==================== FUNCIÓN DE NOTIFICACIÓN CORREGIDA ====================
+
+function mostrarNotificacion(mensaje, tipo = 'success') {
+    // Evitar recursión: usar función diferente si ya existe
+    if (window.mostrarNotif) {
+        window.mostrarNotif(mensaje, tipo);
+        return;
+    }
+    
+    try {
+        // Crear notificación simple
+        const notificacion = document.createElement('div');
+        notificacion.className = 'notification';
+        
+        // Icono según tipo
+        let icono = 'fa-check-circle';
+        if (tipo === 'error') icono = 'fa-exclamation-circle';
+        if (tipo === 'warning') icono = 'fa-exclamation-triangle';
+        if (tipo === 'info') icono = 'fa-info-circle';
+        
+        notificacion.innerHTML = `
+            <i class="fas ${icono}"></i>
+            <span>${mensaje}</span>
+        `;
+        
+        // Estilos
+        notificacion.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: ${tipo === 'success' ? '#28a745' : 
+                        tipo === 'error' ? '#dc3545' : 
+                        tipo === 'warning' ? '#ffc107' : '#17a2b8'};
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 10000;
+            animation: slideIn 0.3s ease;
+            max-width: 400px;
+        `;
+        
+        // Agregar al DOM
+        document.body.appendChild(notificacion);
+        
+        // Remover después de 3 segundos
+        setTimeout(() => {
+            notificacion.style.animation = 'slideOut 0.3s ease';
+            setTimeout(() => {
+                if (notificacion.parentNode) {
+                    notificacion.parentNode.removeChild(notificacion);
+                }
+            }, 300);
+        }, 3000);
+        
+    } catch (error) {
+        console.error('Error mostrando notificación:', error);
+        // Fallback simple
+        alert(mensaje);
+    }
+}
+
+// Hacer disponible globalmente con nombre diferente
+window.mostrarNotif = mostrarNotificacion;
+
 // ==================== INICIALIZACIÓN ====================
 
 document.addEventListener('DOMContentLoaded', async function() {
     console.log('🚀 Terrenos PY - Iniciando aplicación...');
     
+    // Mostrar estado de conexión
+    mostrarEstadoInicial();
+    
     // Inicializar API
     try {
         propiedades = await terrenosAPI.init();
         console.log(`✅ ${propiedades.length} terrenos cargados`);
+        
+        // Actualizar estadísticas si existen
+        actualizarEstadisticas();
+        
     } catch (error) {
         console.error('❌ Error inicializando API:', error);
+        mostrarNotificacion('Error cargando datos. Usando modo local.', 'warning');
     }
     
     // Inicializar según la página
-    const path = window.location.pathname;
+    const path = window.location.pathname.split('/').pop();
     
-    if (path.includes('admin.html')) {
+    if (path === 'admin.html') {
         inicializarAdmin();
-    } else if (path.includes('property.html')) {
+    } else if (path === 'property.html') {
         inicializarDetalle();
     } else {
         inicializarHome();
@@ -40,6 +117,44 @@ function formatoNumero(num) {
 function formatoPrecio(precio) {
     if (!precio || precio <= 0) return 'Consultar precio';
     return `Gs. ${formatoNumero(precio)}`;
+}
+
+function mostrarEstadoInicial() {
+    const estado = terrenosAPI.getEstadoConexion();
+    console.log('📊 Estado del sistema:', estado);
+    
+    // Mostrar advertencia si hay errores de Gist
+    if (estado.errores.gistAuth || estado.errores.token) {
+        setTimeout(() => {
+            mostrarNotificacion('⚠️ Error con GitHub Gist. Usando almacenamiento local.', 'warning');
+        }, 1000);
+    }
+}
+
+function actualizarEstadisticas() {
+    // Actualizar contador en hero si existe
+    const totalElement = document.getElementById('totalTerrenos');
+    if (totalElement) {
+        totalElement.textContent = propiedades.length;
+    }
+    
+    // Actualizar en admin si existe
+    const totalAdmin = document.getElementById('totalTerrenosCount');
+    if (totalAdmin) {
+        totalAdmin.textContent = propiedades.length;
+    }
+    
+    const destacados = propiedades.filter(t => t.destacado).length;
+    const destacadosElement = document.getElementById('destacadosCount');
+    if (destacadosElement) {
+        destacadosElement.textContent = destacados;
+    }
+    
+    const disponibles = propiedades.filter(t => t.estado === 'disponible').length;
+    const disponiblesElement = document.getElementById('disponiblesCount');
+    if (disponiblesElement) {
+        disponiblesElement.textContent = disponibles;
+    }
 }
 
 // ==================== PÁGINA PRINCIPAL ====================
@@ -61,36 +176,61 @@ function inicializarHome() {
         });
     }
     
-    // Botón de sincronización
-    const syncBtn = document.createElement('button');
-    syncBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Sincronizar';
-    syncBtn.className = 'btn-primary';
-    syncBtn.style.cssText = `
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 1000;
-        padding: 10px 20px;
-        font-size: 0.9rem;
-    `;
-    syncBtn.onclick = async () => {
-        syncBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sincronizando...';
-        syncBtn.disabled = true;
-        
-        try {
-            await terrenosAPI.sincronizar();
-            propiedades = terrenosAPI.getTerrenos();
-            renderizarTerrenosHome(document.getElementById('propertiesContainer'));
-            mostrarNotificacion('✅ Sincronizado correctamente', 'success');
-        } catch (error) {
-            mostrarNotificacion('❌ Error sincronizando', 'error');
-        } finally {
-            syncBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Sincronizar';
-            syncBtn.disabled = false;
-        }
-    };
+    const searchBtn = document.getElementById('searchBtn');
+    if (searchBtn) {
+        searchBtn.addEventListener('click', function() {
+            buscarTerrenos(searchInput.value);
+        });
+    }
     
-    document.body.appendChild(syncBtn);
+    // Configurar filtros rápidos
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Remover activo de todos
+            filterButtons.forEach(b => b.classList.remove('active'));
+            // Activar actual
+            this.classList.add('active');
+            
+            const filter = this.getAttribute('data-filter');
+            aplicarFiltro(filter);
+        });
+    });
+    
+    // Botón de sincronización
+    const syncBtn = document.getElementById('syncBtn');
+    if (syncBtn) {
+        syncBtn.addEventListener('click', async function() {
+            const originalHTML = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sincronizando...';
+            this.disabled = true;
+            
+            try {
+                await terrenosAPI.sincronizar();
+                propiedades = terrenosAPI.getTerrenos();
+                renderizarTerrenosHome(document.getElementById('propertiesContainer'));
+                mostrarNotificacion('✅ Sincronizado correctamente');
+            } catch (error) {
+                mostrarNotificacion('❌ Error sincronizando', 'error');
+            } finally {
+                this.innerHTML = originalHTML;
+                this.disabled = false;
+            }
+        });
+    }
+    
+    // Última sincronización
+    const lastSync = localStorage.getItem('terrenos_py_last_sync_v3');
+    if (lastSync) {
+        const lastSyncElement = document.getElementById('lastSync');
+        if (lastSyncElement) {
+            const fecha = new Date(lastSync);
+            lastSyncElement.textContent = `Última sincronización: ${fecha.toLocaleString()}`;
+        }
+    }
+    
+    // Cargar terrenos destacados
+    cargarDestacados();
 }
 
 function renderizarTerrenosHome(container) {
@@ -121,6 +261,7 @@ function renderizarTerrenosHome(container) {
 function crearTarjetaTerreno(terreno, esAdmin = false) {
     const card = document.createElement('div');
     card.className = 'property-card';
+    if (terreno.destacado) card.classList.add('destacado');
     card.dataset.id = terreno.id;
     
     // Imagen
@@ -130,7 +271,7 @@ function crearTarjetaTerreno(terreno, esAdmin = false) {
     const img = document.createElement('img');
     img.src = terreno.imagenes && terreno.imagenes.length > 0 
         ? terreno.imagenes[0] 
-        : 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&auto=format&fit=crop';
+        : APP_CONFIG.DEFAULT_IMAGES[0];
     img.alt = terreno.titulo || 'Terreno';
     img.className = 'property-image';
     
@@ -142,6 +283,23 @@ function crearTarjetaTerreno(terreno, esAdmin = false) {
     }
     
     imgContainer.appendChild(img);
+    
+    // Badge destacado
+    if (terreno.destacado) {
+        const badge = document.createElement('div');
+        badge.className = 'destacado-badge';
+        badge.innerHTML = '<i class="fas fa-star"></i> Destacado';
+        imgContainer.appendChild(badge);
+    }
+    
+    // Contador de imágenes
+    if (terreno.imagenes && terreno.imagenes.length > 1) {
+        const count = document.createElement('div');
+        count.className = 'image-count';
+        count.textContent = `${terreno.imagenes.length} imágenes`;
+        imgContainer.appendChild(count);
+    }
+    
     card.appendChild(imgContainer);
     
     // Contenido
@@ -161,30 +319,36 @@ function crearTarjetaTerreno(terreno, esAdmin = false) {
     }
     content.appendChild(title);
     
+    // Metadatos
+    const meta = document.createElement('div');
+    meta.className = 'property-meta';
+    
     // Ubicación
     const location = document.createElement('div');
     location.className = 'property-location';
     location.innerHTML = `<i class="fas fa-map-marker-alt"></i><span>${terreno.ubicacion || 'Sin ubicación'}</span>`;
-    content.appendChild(location);
+    meta.appendChild(location);
     
     // Precio
     const price = document.createElement('div');
     price.className = 'property-price';
     price.innerHTML = `<i class="fas fa-tag"></i><span>${formatoPrecio(terreno.precio)}</span>`;
-    content.appendChild(price);
+    meta.appendChild(price);
     
     // Tamaño
     const size = document.createElement('div');
     size.className = 'property-size';
     size.innerHTML = `<i class="fas fa-expand-alt"></i><span>${formatoNumero(terreno.tamaño)} m²</span>`;
-    content.appendChild(size);
+    meta.appendChild(size);
+    
+    content.appendChild(meta);
     
     // Descripción breve
     const description = document.createElement('p');
     description.className = 'property-description';
     if (terreno.descripcion) {
-        const descCorta = terreno.descripcion.length > 100 
-            ? terreno.descripcion.substring(0, 100) + '...' 
+        const descCorta = terreno.descripcion.length > 120 
+            ? terreno.descripcion.substring(0, 120) + '...' 
             : terreno.descripcion;
         description.textContent = descCorta;
     }
@@ -197,12 +361,19 @@ function crearTarjetaTerreno(terreno, esAdmin = false) {
     if (!esAdmin) {
         const detailBtn = document.createElement('a');
         detailBtn.href = `property.html?id=${terreno.id}`;
-        detailBtn.className = 'btn-primary property-detail-btn';
+        detailBtn.className = 'btn btn-primary property-detail-btn';
         detailBtn.innerHTML = '<i class="fas fa-eye"></i> Ver detalles';
         actions.appendChild(detailBtn);
     } else {
         const adminActions = document.createElement('div');
         adminActions.className = 'admin-actions';
+        
+        const viewBtn = document.createElement('a');
+        viewBtn.href = `property.html?id=${terreno.id}`;
+        viewBtn.className = 'btn btn-small';
+        viewBtn.innerHTML = '<i class="fas fa-eye"></i>';
+        viewBtn.title = 'Ver detalles';
+        adminActions.appendChild(viewBtn);
         
         const editBtn = document.createElement('button');
         editBtn.className = 'btn-edit';
@@ -210,6 +381,7 @@ function crearTarjetaTerreno(terreno, esAdmin = false) {
         editBtn.addEventListener('click', () => {
             editarTerreno(terreno.id);
         });
+        adminActions.appendChild(editBtn);
         
         const deleteBtn = document.createElement('button');
         deleteBtn.className = 'btn-delete';
@@ -219,9 +391,8 @@ function crearTarjetaTerreno(terreno, esAdmin = false) {
                 await eliminarTerreno(terreno.id);
             }
         });
-        
-        adminActions.appendChild(editBtn);
         adminActions.appendChild(deleteBtn);
+        
         actions.appendChild(adminActions);
     }
     
@@ -232,31 +403,105 @@ function crearTarjetaTerreno(terreno, esAdmin = false) {
 }
 
 function buscarTerrenos(query) {
+    const container = document.getElementById('propertiesContainer');
+    const noResults = document.getElementById('noResults');
+    
+    if (!container) return;
+    
     if (!query.trim()) {
-        const container = document.getElementById('propertiesContainer');
-        if (container) renderizarTerrenosHome(container);
+        if (noResults) noResults.style.display = 'none';
+        renderizarTerrenosHome(container);
         return;
     }
     
     const resultados = terrenosAPI.buscarTerrenos(query);
     
-    const container = document.getElementById('propertiesContainer');
-    if (!container) return;
-    
     container.innerHTML = '';
     
     if (resultados.length === 0) {
+        if (noResults) {
+            noResults.style.display = 'block';
+        } else {
+            container.innerHTML = `
+                <div class="no-results">
+                    <i class="fas fa-search"></i>
+                    <h3>No se encontraron resultados</h3>
+                    <p>Intenta con otros términos de búsqueda</p>
+                </div>
+            `;
+        }
+        return;
+    }
+    
+    if (noResults) noResults.style.display = 'none';
+    
+    resultados.forEach(terreno => {
+        const card = crearTarjetaTerreno(terreno, false);
+        container.appendChild(card);
+    });
+}
+
+function aplicarFiltro(filtro) {
+    const container = document.getElementById('propertiesContainer');
+    if (!container) return;
+    
+    let terrenosFiltrados = [...propiedades];
+    
+    switch(filtro) {
+        case 'destacados':
+            terrenosFiltrados = terrenosFiltrados.filter(t => t.destacado);
+            break;
+        case 'baratos':
+            terrenosFiltrados = terrenosFiltrados
+                .filter(t => t.precio > 0)
+                .sort((a, b) => a.precio - b.precio);
+            break;
+        case 'grandes':
+            terrenosFiltrados = terrenosFiltrados
+                .filter(t => t.tamaño > 0)
+                .sort((a, b) => b.tamaño - a.tamaño);
+            break;
+        // 'all' no filtra
+    }
+    
+    container.innerHTML = '';
+    
+    if (terrenosFiltrados.length === 0) {
         container.innerHTML = `
             <div class="no-results">
-                <i class="fas fa-search"></i>
-                <h3>No se encontraron resultados</h3>
-                <p>Intenta con otros términos de búsqueda</p>
+                <i class="fas fa-filter"></i>
+                <h3>No hay terrenos con este filtro</h3>
+                <p>Intenta con otro filtro</p>
             </div>
         `;
         return;
     }
     
-    resultados.forEach(terreno => {
+    terrenosFiltrados.forEach(terreno => {
+        const card = crearTarjetaTerreno(terreno, false);
+        container.appendChild(card);
+    });
+}
+
+async function cargarDestacados() {
+    const container = document.getElementById('featuredContainer');
+    if (!container) return;
+    
+    const destacados = terrenosAPI.getTerrenosDestacados();
+    
+    if (destacados.length === 0) {
+        container.innerHTML = `
+            <div class="no-properties" style="grid-column: 1/-1;">
+                <i class="fas fa-star"></i>
+                <h3>No hay terrenos destacados</h3>
+                <p>Marca algunos terrenos como destacados en el panel de administración</p>
+            </div>
+        `;
+        return;
+    }
+    
+    container.innerHTML = '';
+    destacados.forEach(terreno => {
         const card = crearTarjetaTerreno(terreno, false);
         container.appendChild(card);
     });
@@ -293,6 +538,7 @@ async function cargarDetalleTerreno() {
 }
 
 function actualizarPaginaDetalle(terreno) {
+    // Elementos principales
     const elementos = {
         'detailTitle': terreno.titulo || 'Terreno',
         'detailPrice': formatoPrecio(terreno.precio),
@@ -306,19 +552,71 @@ function actualizarPaginaDetalle(terreno) {
         const elemento = document.getElementById(id);
         if (elemento) elemento.textContent = elementos[id];
     });
+    
+    // Actualizar título de la página
+    document.title = `${terreno.titulo} | Terrenos PY`;
+    
+    // Actualizar features si existen
+    const featuresContainer = document.querySelector('.property-features');
+    if (featuresContainer) {
+        featuresContainer.innerHTML = '';
+        
+        const features = [
+            { icon: 'map-marker-alt', label: 'Ubicación', value: terreno.ubicacion },
+            { icon: 'expand', label: 'Tamaño', value: `${formatoNumero(terreno.tamaño)} m²` },
+            { icon: 'tag', label: 'Precio', value: formatoPrecio(terreno.precio) },
+            { icon: 'calendar', label: 'Publicado', value: new Date(terreno.fechaCreacion).toLocaleDateString() }
+        ];
+        
+        features.forEach(feature => {
+            if (feature.value) {
+                const featureItem = document.createElement('div');
+                featureItem.className = 'feature-item';
+                featureItem.innerHTML = `
+                    <i class="fas fa-${feature.icon}"></i>
+                    <div class="feature-content">
+                        <span class="feature-label">${feature.label}:</span>
+                        <span class="feature-value">${feature.value}</span>
+                    </div>
+                `;
+                featuresContainer.appendChild(featureItem);
+            }
+        });
+    }
 }
 
 function configurarCarrusel(imagenes) {
     const imagenPrincipal = document.getElementById('detailImage');
     const btnAnterior = document.getElementById('prevImage');
     const btnSiguiente = document.getElementById('nextImage');
+    const dotsContainer = document.querySelector('.carousel-nav');
     
-    if (!imagenPrincipal || !imagenes || imagenes.length === 0) return;
+    if (!imagenPrincipal || !imagenes || imagenes.length === 0) {
+        // Usar imagen por defecto
+        if (imagenPrincipal) {
+            imagenPrincipal.src = APP_CONFIG.DEFAULT_IMAGES[0];
+        }
+        return;
+    }
     
     let indiceActual = 0;
     
     function actualizarImagen() {
         imagenPrincipal.src = imagenes[indiceActual];
+        
+        // Actualizar dots
+        if (dotsContainer) {
+            dotsContainer.innerHTML = '';
+            imagenes.forEach((_, index) => {
+                const dot = document.createElement('button');
+                dot.className = `carousel-dot ${index === indiceActual ? 'active' : ''}`;
+                dot.addEventListener('click', () => {
+                    indiceActual = index;
+                    actualizarImagen();
+                });
+                dotsContainer.appendChild(dot);
+            });
+        }
     }
     
     if (btnAnterior) {
@@ -342,9 +640,16 @@ function configurarMapa(urlMapa) {
     const iframeMapa = document.getElementById('detailMap');
     if (!iframeMapa || !urlMapa) return;
     
+    // Convertir URL de Google Maps a embed
     let urlEmbed = urlMapa;
     if (urlMapa.includes('/maps?') && !urlMapa.includes('/embed')) {
         urlEmbed = urlMapa.replace('/maps?', '/maps/embed?');
+    } else if (urlMapa.includes('@')) {
+        // Coordenadas: -25.2820,-57.6351
+        const coords = urlMapa.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+        if (coords) {
+            urlEmbed = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1000!2d${coords[2]}!3d${coords[1]}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2spy!4v${Date.now()}`;
+        }
     }
     
     iframeMapa.src = urlEmbed;
@@ -355,9 +660,15 @@ function configurarWhatsApp(terreno) {
     if (!btnWhatsApp) return;
     
     const mensaje = encodeURIComponent(
-        `Hola! Estoy interesado en el terreno: ${terreno.titulo} (${terreno.ubicacion}). Precio: ${formatoPrecio(terreno.precio)}.`
+        `Hola! Estoy interesado en el terreno:\n\n` +
+        `*${terreno.titulo}*\n` +
+        `📍 ${terreno.ubicacion}\n` +
+        `💰 ${formatoPrecio(terreno.precio)}\n` +
+        `📏 ${formatoNumero(terreno.tamaño)} m²\n\n` +
+        `Me gustaría más información.`
     );
-    btnWhatsApp.href = `https://wa.me/595984323438?text=${mensaje}`;
+    
+    btnWhatsApp.href = `https://wa.me/${SITE_CONFIG.whatsapp}?text=${mensaje}`;
 }
 
 function mostrarError(mensaje) {
@@ -365,10 +676,10 @@ function mostrarError(mensaje) {
     if (main) {
         main.innerHTML = `
             <div class="container">
-                <div class="error-container">
+                <div class="error-message">
                     <i class="fas fa-exclamation-circle"></i>
                     <h2>${mensaje}</h2>
-                    <a href="index.html" class="btn-primary">Volver al inicio</a>
+                    <a href="index.html" class="btn btn-primary">Volver al inicio</a>
                 </div>
             </div>
         `;
@@ -382,6 +693,8 @@ function inicializarAdmin() {
     
     configurarLogin();
     configurarFormulario();
+    configurarTabs();
+    configurarSistema();
     
     // Verificar si ya está logueado
     verificarLoginPrev();
@@ -402,8 +715,8 @@ function configurarLogin() {
         
         // Credenciales por defecto
         const credencialesValidas = {
-            usuario: 'admin',
-            contraseña: 'admin123'
+            usuario: APP_CONFIG.ADMIN.USERNAME,
+            contraseña: APP_CONFIG.ADMIN.PASSWORD
         };
         
         // Validar credenciales
@@ -418,9 +731,10 @@ function configurarLogin() {
             
             // Cargar terrenos
             cargarTerrenosAdmin();
+            actualizarEstadisticasAdmin();
             
         } else {
-            alert('Usuario o contraseña incorrectos');
+            mostrarNotificacion('Usuario o contraseña incorrectos', 'error');
         }
     });
     
@@ -449,11 +763,12 @@ function verificarLoginPrev() {
         if (dashboardSection) dashboardSection.style.display = 'block';
         
         cargarTerrenosAdmin();
+        actualizarEstadisticasAdmin();
     }
 }
 
 async function cargarTerrenosAdmin() {
-    const container = document.getElementById('adminPropertiesContainer');
+    const container = document.getElementById('adminPropertiesTable');
     const countElement = document.getElementById('propertyCount');
     
     if (!container) return;
@@ -466,33 +781,131 @@ async function cargarTerrenosAdmin() {
         countElement.textContent = `${propiedades.length} terrenos`;
     }
     
-    // Renderizar
-    renderizarTerrenosAdmin(container);
+    // Renderizar tabla
+    renderizarTablaAdmin(container);
 }
 
-function renderizarTerrenosAdmin(container) {
+function renderizarTablaAdmin(container) {
     if (!container || !propiedades) return;
     
     container.innerHTML = '';
     
     if (propiedades.length === 0) {
         container.innerHTML = `
-            <div class="no-properties">
-                <i class="fas fa-home"></i>
-                <h3>No hay terrenos disponibles</h3>
-                <p>Agrega tu primer terreno usando el formulario</p>
-            </div>
+            <tr>
+                <td colspan="9" style="text-align: center; padding: 40px;">
+                    <i class="fas fa-home" style="font-size: 3rem; color: #ccc; margin-bottom: 20px;"></i>
+                    <h3 style="color: #666; margin: 10px 0;">No hay terrenos disponibles</h3>
+                    <p style="color: #999;">Agrega tu primer terreno usando el formulario</p>
+                </td>
+            </tr>
         `;
         return;
     }
     
     propiedades.forEach(terreno => {
-        const card = crearTarjetaTerreno(terreno, true);
-        container.appendChild(card);
+        const row = document.createElement('tr');
+        
+        // ID
+        const tdId = document.createElement('td');
+        tdId.textContent = terreno.id.substring(0, 8) + '...';
+        row.appendChild(tdId);
+        
+        // Imagen
+        const tdImg = document.createElement('td');
+        const img = document.createElement('img');
+        img.src = terreno.imagenes && terreno.imagenes.length > 0 
+            ? terreno.imagenes[0] 
+            : APP_CONFIG.DEFAULT_IMAGES[0];
+        img.style.cssText = 'width: 50px; height: 50px; object-fit: cover; border-radius: 4px;';
+        tdImg.appendChild(img);
+        row.appendChild(tdImg);
+        
+        // Título
+        const tdTitle = document.createElement('td');
+        tdTitle.innerHTML = `<strong>${terreno.titulo}</strong>`;
+        if (terreno.destacado) {
+            tdTitle.innerHTML += '<br><small style="color: var(--accent-color);"><i class="fas fa-star"></i> Destacado</small>';
+        }
+        row.appendChild(tdTitle);
+        
+        // Ubicación
+        const tdLocation = document.createElement('td');
+        tdLocation.textContent = terreno.ubicacion;
+        row.appendChild(tdLocation);
+        
+        // Precio
+        const tdPrice = document.createElement('td');
+        tdPrice.textContent = formatoPrecio(terreno.precio);
+        row.appendChild(tdPrice);
+        
+        // Tamaño
+        const tdSize = document.createElement('td');
+        tdSize.textContent = `${formatoNumero(terreno.tamaño)} m²`;
+        row.appendChild(tdSize);
+        
+        // Estado
+        const tdStatus = document.createElement('td');
+        const statusBadge = document.createElement('span');
+        statusBadge.className = `status-badge status-${terreno.estado || 'available'}`;
+        statusBadge.textContent = terreno.estado === 'disponible' ? 'Disponible' : 
+                                 terreno.estado === 'reservado' ? 'Reservado' : 'Vendido';
+        tdStatus.appendChild(statusBadge);
+        row.appendChild(tdStatus);
+        
+        // Fecha
+        const tdDate = document.createElement('td');
+        tdDate.textContent = new Date(terreno.fechaActualizacion).toLocaleDateString();
+        row.appendChild(tdDate);
+        
+        // Acciones
+        const tdActions = document.createElement('td');
+        tdActions.className = 'action-buttons';
+        
+        const viewBtn = document.createElement('button');
+        viewBtn.className = 'action-btn action-view';
+        viewBtn.innerHTML = '<i class="fas fa-eye"></i>';
+        viewBtn.title = 'Ver detalles';
+        viewBtn.onclick = () => window.open(`property.html?id=${terreno.id}`, '_blank');
+        
+        const editBtn = document.createElement('button');
+        editBtn.className = 'action-btn action-edit';
+        editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+        editBtn.title = 'Editar';
+        editBtn.onclick = () => editarTerreno(terreno.id);
+        
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'action-btn action-delete';
+        deleteBtn.innerHTML = '<i class="fas fa-trash"></i>';
+        deleteBtn.title = 'Eliminar';
+        deleteBtn.onclick = async () => {
+            if (confirm('¿Estás seguro de eliminar este terreno?')) {
+                await eliminarTerreno(terreno.id);
+            }
+        };
+        
+        tdActions.appendChild(viewBtn);
+        tdActions.appendChild(editBtn);
+        tdActions.appendChild(deleteBtn);
+        row.appendChild(tdActions);
+        
+        container.appendChild(row);
     });
 }
 
-async function configurarFormulario() {
+function actualizarEstadisticasAdmin() {
+    actualizarEstadisticas();
+    
+    // Última sincronización
+    const lastSync = localStorage.getItem('terrenos_py_last_sync_v3');
+    const syncElement = document.getElementById('ultimaSync');
+    if (syncElement && lastSync) {
+        const fecha = new Date(lastSync);
+        syncElement.textContent = fecha.toLocaleTimeString();
+    }
+}
+
+function configurarFormulario() {
     const form = document.getElementById('propertyForm');
     if (!form) return;
     
@@ -514,6 +927,8 @@ async function configurarFormulario() {
             const email = document.getElementById('propEmail').value.trim();
             const telefono = document.getElementById('propPhone').value.trim();
             const mapaUrl = document.getElementById('propMapLink').value.trim();
+            const estado = document.getElementById('propEstado').value;
+            const destacado = document.getElementById('propDestacado').checked;
             const inputImagenes = document.getElementById('propImages');
             
             // Validar campos obligatorios
@@ -535,12 +950,11 @@ async function configurarFormulario() {
             
             // Si no hay imágenes, usar por defecto
             if (imagenes.length === 0) {
-                imagenes = ['https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&auto=format&fit=crop'];
+                imagenes = APP_CONFIG.DEFAULT_IMAGES.slice(0, 2);
             }
             
             // Crear objeto terreno
             const terrenoData = {
-                id: editandoId || undefined,
                 titulo,
                 ubicacion,
                 precio: Number(precio),
@@ -549,31 +963,35 @@ async function configurarFormulario() {
                 email,
                 telefono,
                 mapaUrl,
+                estado,
+                destacado,
                 imagenes
             };
             
             // Guardar
-            let terrenoGuardado;
+            let resultado;
             if (editandoId) {
-                terrenoGuardado = await terrenosAPI.actualizarTerreno(editandoId, terrenoData);
+                resultado = await terrenosAPI.actualizarTerreno(editandoId, terrenoData);
             } else {
-                terrenoGuardado = await terrenosAPI.agregarTerreno(terrenoData);
+                resultado = await terrenosAPI.agregarTerreno(terrenoData);
             }
             
-            // Actualizar lista local
-            propiedades = terrenosAPI.getTerrenos();
-            
-            // Actualizar vista
-            await cargarTerrenosAdmin();
-            
-            // Limpiar formulario
-            form.reset();
-            editandoId = null;
-            document.getElementById('imagePreview').innerHTML = '';
-            btn.innerHTML = '<i class="fas fa-save"></i> <span>Guardar terreno</span>';
-            
-            // Mostrar mensaje
-            mostrarNotificacion(editandoId ? '✅ Terreno actualizado' : '✅ Terreno agregado');
+            if (resultado.success) {
+                // Actualizar lista local
+                propiedades = terrenosAPI.getTerrenos();
+                
+                // Actualizar vista
+                await cargarTerrenosAdmin();
+                actualizarEstadisticasAdmin();
+                
+                // Limpiar formulario
+                limpiarFormulario();
+                
+                // Mostrar mensaje
+                mostrarNotificacion(resultado.message);
+            } else {
+                throw new Error(resultado.error || 'Error al guardar');
+            }
             
         } catch (error) {
             console.error('❌ Error guardando terreno:', error);
@@ -583,6 +1001,18 @@ async function configurarFormulario() {
             btn.innerHTML = originalText;
         }
     });
+    
+    // Botón cancelar edición
+    const cancelBtn = document.getElementById('cancelEditBtn');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', limpiarFormulario);
+    }
+    
+    // Botón limpiar formulario
+    const clearBtn = document.getElementById('clearFormBtn');
+    if (clearBtn) {
+        clearBtn.addEventListener('click', limpiarFormulario);
+    }
 }
 
 async function procesarImagenes(files) {
@@ -596,7 +1026,10 @@ async function procesarImagenes(files) {
         if (!file.type.startsWith('image/')) continue;
         
         // Validar tamaño (máx 5MB)
-        if (file.size > 5 * 1024 * 1024) continue;
+        if (file.size > APP_CONFIG.MAX_FILE_SIZE) {
+            console.warn(`Imagen ${file.name} demasiado grande (${(file.size / 1024 / 1024).toFixed(2)} MB)`);
+            continue;
+        }
         
         // Convertir a DataURL
         try {
@@ -622,7 +1055,7 @@ function archivoADataURL(file) {
 function editarTerreno(id) {
     const terreno = terrenosAPI.getTerrenoPorId(id);
     if (!terreno) {
-        alert('Terreno no encontrado');
+        mostrarNotificacion('Terreno no encontrado', 'error');
         return;
     }
     
@@ -637,12 +1070,17 @@ function editarTerreno(id) {
     document.getElementById('propEmail').value = terreno.email || '';
     document.getElementById('propPhone').value = terreno.telefono || '';
     document.getElementById('propMapLink').value = terreno.mapaUrl || '';
+    document.getElementById('propEstado').value = terreno.estado || 'disponible';
+    document.getElementById('propDestacado').checked = terreno.destacado || false;
     
     // Cambiar texto del botón
     const btn = document.getElementById('submitPropertyBtn');
-    if (btn) {
-        btn.innerHTML = '<i class="fas fa-save"></i> <span>Actualizar terreno</span>';
-    }
+    const span = btn.querySelector('span');
+    if (span) span.textContent = 'Actualizar Terreno';
+    
+    // Mostrar botón cancelar
+    const cancelBtn = document.getElementById('cancelEditBtn');
+    if (cancelBtn) cancelBtn.style.display = 'inline-block';
     
     // Mostrar imágenes existentes
     const preview = document.getElementById('imagePreview');
@@ -651,13 +1089,35 @@ function editarTerreno(id) {
         terreno.imagenes.forEach(img => {
             const imgEl = document.createElement('img');
             imgEl.src = img;
-            imgEl.style.cssText = 'width: 100px; height: 100px; object-fit: cover; border-radius: 8px;';
+            imgEl.className = 'preview-image';
             preview.appendChild(imgEl);
         });
     }
     
     // Scroll al formulario
     document.getElementById('propertyForm').scrollIntoView({ behavior: 'smooth' });
+    
+    mostrarNotificacion(`Editando terreno: ${terreno.titulo}`, 'info');
+}
+
+function limpiarFormulario() {
+    const form = document.getElementById('propertyForm');
+    if (form) form.reset();
+    
+    editandoId = null;
+    
+    // Restaurar texto del botón
+    const btn = document.getElementById('submitPropertyBtn');
+    const span = btn.querySelector('span');
+    if (span) span.textContent = 'Guardar Terreno';
+    
+    // Ocultar botón cancelar
+    const cancelBtn = document.getElementById('cancelEditBtn');
+    if (cancelBtn) cancelBtn.style.display = 'none';
+    
+    // Limpiar previsualización
+    const preview = document.getElementById('imagePreview');
+    if (preview) preview.innerHTML = '';
 }
 
 async function eliminarTerreno(id) {
@@ -666,64 +1126,121 @@ async function eliminarTerreno(id) {
     }
     
     try {
-        const eliminado = await terrenosAPI.borrarTerreno(id);
+        const resultado = await terrenosAPI.borrarTerreno(id);
         
-        if (eliminado) {
+        if (resultado.success) {
             // Actualizar lista local
             propiedades = terrenosAPI.getTerrenos();
             
             // Actualizar vista
             await cargarTerrenosAdmin();
+            actualizarEstadisticasAdmin();
             
-            // Si estaba editando este terreno, resetear formulario
+            // Si estaba editando este terreno, limpiar formulario
             if (editandoId === id) {
-                editandoId = null;
-                const form = document.getElementById('propertyForm');
-                if (form) form.reset();
-                const btn = document.getElementById('submitPropertyBtn');
-                if (btn) {
-                    btn.innerHTML = '<i class="fas fa-save"></i> <span>Guardar terreno</span>';
-                }
-                const preview = document.getElementById('imagePreview');
-                if (preview) preview.innerHTML = '';
+                limpiarFormulario();
             }
             
-            mostrarNotificacion('🗑️ Terreno eliminado');
+            mostrarNotificacion(resultado.message);
+        } else {
+            throw new Error(resultado.error);
         }
     } catch (error) {
-        mostrarNotificacion('❌ Error eliminando terreno', 'error');
+        mostrarNotificacion('❌ Error eliminando terreno: ' + error.message, 'error');
     }
 }
 
-// ==================== FUNCIONES GLOBALES ====================
+function configurarTabs() {
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Remover activo de todos
+            tabBtns.forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            // Activar actual
+            this.classList.add('active');
+            const tabId = this.getAttribute('data-tab');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+        });
+    });
+}
 
-function mostrarNotificacion(mensaje, tipo = 'success') {
-    // Usar función existente o crear nueva
-    if (typeof window.mostrarNotificacion === 'function') {
-        window.mostrarNotificacion(mensaje, tipo);
-    } else {
-        // Crear notificación simple
-        const notificacion = document.createElement('div');
-        notificacion.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: ${tipo === 'success' ? '#28a745' : '#dc3545'};
-            color: white;
-            padding: 15px 25px;
-            border-radius: 8px;
-            z-index: 10000;
-            animation: slideIn 0.3s ease;
-        `;
-        notificacion.textContent = mensaje;
-        document.body.appendChild(notificacion);
-        
-        setTimeout(() => {
-            notificacion.remove();
-        }, 3000);
+function configurarSistema() {
+    // Configurar botones del sistema
+    const testGistBtn = document.getElementById('testGistBtn');
+    if (testGistBtn) {
+        testGistBtn.addEventListener('click', async function() {
+            const originalHTML = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Probando...';
+            this.disabled = true;
+            
+            const resultado = await terrenosAPI.probarConexionGist();
+            
+            if (resultado.success) {
+                mostrarNotificacion('✅ Conexión Gist exitosa');
+            } else {
+                mostrarNotificacion('❌ Error: ' + resultado.error, 'error');
+            }
+            
+            this.innerHTML = originalHTML;
+            this.disabled = false;
+        });
+    }
+    
+    const manualSyncBtn = document.getElementById('manualSyncBtn');
+    if (manualSyncBtn) {
+        manualSyncBtn.addEventListener('click', async function() {
+            const originalHTML = this.innerHTML;
+            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sincronizando...';
+            this.disabled = true;
+            
+            try {
+                await terrenosAPI.sincronizar();
+                propiedades = terrenosAPI.getTerrenos();
+                await cargarTerrenosAdmin();
+                actualizarEstadisticasAdmin();
+                mostrarNotificacion('✅ Sincronización completada');
+            } catch (error) {
+                mostrarNotificacion('❌ Error sincronizando', 'error');
+            } finally {
+                this.innerHTML = originalHTML;
+                this.disabled = false;
+            }
+        });
+    }
+    
+    const clearCacheBtn = document.getElementById('clearCacheBtn');
+    if (clearCacheBtn) {
+        clearCacheBtn.addEventListener('click', function() {
+            if (confirm('¿Limpiar caché local? Esto no afecta los datos en Gist.')) {
+                const resultado = terrenosAPI.limpiarCache();
+                if (resultado.success) {
+                    mostrarNotificacion('🧹 Caché limpiado correctamente');
+                    setTimeout(() => location.reload(), 1000);
+                }
+            }
+        });
+    }
+    
+    // Mostrar información del sistema
+    const sysTotalElement = document.getElementById('sysTotalTerrenos');
+    if (sysTotalElement) {
+        sysTotalElement.textContent = propiedades.length;
+    }
+    
+    const sysLastUpdate = document.getElementById('sysLastUpdate');
+    if (sysLastUpdate) {
+        const lastSync = localStorage.getItem('terrenos_py_last_sync_v3');
+        sysLastUpdate.textContent = lastSync ? new Date(lastSync).toLocaleString() : 'Nunca';
     }
 }
 
-// Hacer funciones disponibles globalmente
+// ==================== INICIALIZACIÓN GLOBAL ====================
+
+// Asegurar que las funciones estén disponibles
 window.cargarTerrenosAdmin = cargarTerrenosAdmin;
 window.sincronizarDatos = () => terrenosAPI.sincronizar();
+window.terrenosAPI = terrenosAPI;
+
+console.log('✅ Sistema Terrenos PY cargado correctamente');
