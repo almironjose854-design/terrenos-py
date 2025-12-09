@@ -19,42 +19,61 @@
     <link rel="stylesheet" href="style.css">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="https://img.icons8.com/color/96/000000/land-sales.png">
     
     <style>
         /* Estilos específicos para admin */
         .admin-header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: var(--space-md) 0;
+            padding: var(--space-xl) 0;
             margin-bottom: var(--space-xl);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .admin-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(212, 175, 55, 0.15) 0%, transparent 50%);
+        }
+        
+        .admin-header-content {
+            position: relative;
+            z-index: 1;
         }
         
         .admin-stats {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--space-md);
+            gap: var(--space-lg);
             margin-bottom: var(--space-xl);
         }
         
         .stat-card {
-            background: white;
+            background: var(--white);
             padding: var(--space-lg);
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-md);
             text-align: center;
-            transition: transform var(--transition-normal);
+            transition: all var(--transition-normal);
+            border: 1px solid var(--light-gray);
         }
         
         .stat-card:hover {
             transform: translateY(-5px);
             box-shadow: var(--shadow-lg);
+            border-color: var(--accent-color);
         }
         
         .stat-card i {
             font-size: 2.5rem;
             color: var(--accent-color);
-            margin-bottom: var(--space-sm);
+            margin-bottom: var(--space-md);
         }
         
         .stat-card h3 {
@@ -73,10 +92,11 @@
             display: flex;
             gap: var(--space-xs);
             margin-bottom: var(--space-xl);
-            background: white;
+            background: var(--white);
             padding: var(--space-xs);
             border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-sm);
+            box-shadow: var(--shadow-md);
+            flex-wrap: wrap;
         }
         
         .tab-btn {
@@ -90,6 +110,7 @@
             cursor: pointer;
             border-radius: var(--radius-md);
             transition: all var(--transition-fast);
+            min-width: 150px;
         }
         
         .tab-btn.active {
@@ -99,11 +120,69 @@
         
         .tab-content {
             display: none;
+            animation: fadeIn 0.3s ease;
         }
         
         .tab-content.active {
             display: block;
-            animation: fadeIn 0.3s ease;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .form-group {
+            margin-bottom: var(--space-lg);
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: var(--space-sm);
+            font-weight: 600;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--light-gray);
+            border-radius: var(--radius-md);
+            font-family: var(--font-main);
+            font-size: 1rem;
+            transition: all var(--transition-fast);
+            background: var(--white);
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+        }
+        
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-group small {
+            display: block;
+            margin-top: 6px;
+            color: #718096;
+            font-size: 0.875rem;
         }
         
         .image-upload-area {
@@ -128,94 +207,44 @@
             margin-bottom: var(--space-md);
         }
         
-        .preview-grid {
+        .image-preview-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             gap: var(--space-md);
             margin-top: var(--space-lg);
         }
         
-        .preview-item {
-            position: relative;
-            border-radius: var(--radius-md);
-            overflow: hidden;
-            aspect-ratio: 1;
-        }
-        
-        .preview-item img {
+        .preview-image {
             width: 100%;
-            height: 100%;
+            height: 120px;
             object-fit: cover;
-        }
-        
-        .preview-item .remove-img {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: rgba(229, 62, 62, 0.9);
-            color: white;
-            border: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--light-gray);
+            transition: all var(--transition-fast);
             cursor: pointer;
-            font-size: 0.8rem;
-            transition: background var(--transition-fast);
         }
         
-        .preview-item .remove-img:hover {
-            background: var(--danger);
+        .preview-image:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-color);
         }
         
-        .map-preview {
-            width: 100%;
-            height: 200px;
-            background: var(--light-gray);
-            border-radius: var(--radius-md);
-            margin-top: var(--space-md);
+        .form-actions {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #718096;
-        }
-        
-        .alert {
-            padding: var(--space-md) var(--space-lg);
-            border-radius: var(--radius-md);
-            margin-bottom: var(--space-lg);
-            display: flex;
-            align-items: center;
             gap: var(--space-md);
-        }
-        
-        .alert-success {
-            background: rgba(56, 161, 105, 0.1);
-            border: 1px solid rgba(56, 161, 105, 0.2);
-            color: var(--success);
-        }
-        
-        .alert-warning {
-            background: rgba(214, 158, 46, 0.1);
-            border: 1px solid rgba(214, 158, 46, 0.2);
-            color: var(--warning);
-        }
-        
-        .alert-error {
-            background: rgba(229, 62, 62, 0.1);
-            border: 1px solid rgba(229, 62, 62, 0.2);
-            color: var(--danger);
+            margin-top: var(--space-xl);
+            padding-top: var(--space-xl);
+            border-top: 1px solid var(--light-gray);
+            flex-wrap: wrap;
         }
         
         .data-table {
             width: 100%;
-            background: white;
+            background: var(--white);
             border-radius: var(--radius-lg);
             overflow: hidden;
             box-shadow: var(--shadow-md);
-            margin-top: var(--space-lg);
+            border-collapse: collapse;
         }
         
         .data-table th {
@@ -308,6 +337,98 @@
             color: white;
         }
         
+        .property-count {
+            font-size: 0.9375rem;
+            color: var(--white);
+            background: var(--accent-color);
+            padding: 6px 16px;
+            border-radius: var(--radius-full);
+            font-weight: 600;
+            margin-left: var(--space-md);
+        }
+        
+        .alert {
+            padding: var(--space-md) var(--space-lg);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            border-left: 4px solid;
+        }
+        
+        .alert-success {
+            background: rgba(56, 161, 105, 0.1);
+            border-color: var(--success);
+            color: var(--success);
+        }
+        
+        .alert-warning {
+            background: rgba(214, 158, 46, 0.1);
+            border-color: var(--warning);
+            color: var(--warning);
+        }
+        
+        .alert-error {
+            background: rgba(229, 62, 62, 0.1);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+        
+        .config-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-xl);
+        }
+        
+        .config-section {
+            background: var(--white);
+            padding: var(--space-xl);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .config-section.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+        
+        .info-item {
+            padding: var(--space-md);
+            background: var(--light-color);
+            border-radius: var(--radius-md);
+        }
+        
+        .export-actions {
+            display: flex;
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+            flex-wrap: wrap;
+        }
+        
+        .admin-nav {
+            display: flex;
+            align-items: center;
+        }
+        
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--success);
+            font-weight: 500;
+        }
+        
+        .system-status i {
+            font-size: 0.8rem;
+        }
+        
         @media (max-width: 768px) {
             .admin-stats {
                 grid-template-columns: repeat(2, 1fr);
@@ -321,6 +442,30 @@
             .tabs {
                 flex-direction: column;
             }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .form-actions .btn {
+                width: 100%;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -330,7 +475,7 @@
         <nav class="nav container">
             <div class="logo">
                 <a href="index.html" class="brand-link">
-                    <img src="assets/logo.png" alt="Terrenos PY Logo" class="logo-img">
+                    <img src="https://img.icons8.com/color/96/000000/land-sales.png" alt="Terrenos PY Logo" class="logo-img">
                     <span>Terrenos PY</span>
                 </a>
             </div>
@@ -358,7 +503,7 @@
 
     <!-- Header admin -->
     <div class="admin-header">
-        <div class="container">
+        <div class="container admin-header-content">
             <h1 style="color: white; margin: 0;">
                 <i class="fas fa-user-cog"></i> Panel de Administración
             </h1>
@@ -525,7 +670,7 @@
                                        onchange="handleImageSelection(event)">
                                 
                                 <!-- Contenedor para previsualización -->
-                                <div id="imagePreview" class="preview-grid"></div>
+                                <div id="imagePreview" class="image-preview-grid"></div>
                                 
                                 <small>Seleccioná hasta 6 imágenes. Recomendamos imágenes de buena calidad.</small>
                             </div>
@@ -534,11 +679,6 @@
                                 <label for="propMapLink"><i class="fas fa-map"></i> Enlace de Google Maps</label>
                                 <input type="url" id="propMapLink" placeholder="https://maps.google.com/?q=-25.2820,-57.6351">
                                 <small>Pegá el enlace de compartir de Google Maps</small>
-                                
-                                <div id="mapPreview" class="map-preview">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span>Vista previa del mapa aparecerá aquí</span>
-                                </div>
                             </div>
                         </div>
 
@@ -548,7 +688,7 @@
                             </button>
                             
                             <button type="submit" class="btn btn-primary" id="submitPropertyBtn">
-                                <i class="fas fa-save"></i> <span>Guardar Terreno</span>
+                                <i class="fas fa-save"></i> <span id="submitBtnText">Guardar Terreno</span>
                             </button>
                             
                             <button type="button" class="btn btn-outline" id="clearFormBtn">
@@ -606,17 +746,6 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                    
-                    <!-- Paginación -->
-                    <div class="pagination" id="pagination" style="display: none; margin-top: var(--space-xl);">
-                        <button class="btn btn-outline" id="prevPageBtn">
-                            <i class="fas fa-chevron-left"></i> Anterior
-                        </button>
-                        <span id="pageInfo">Página 1 de 1</span>
-                        <button class="btn btn-outline" id="nextPageBtn">
-                            Siguiente <i class="fas fa-chevron-right"></i>
-                        </button>
                     </div>
                 </div>
             </div>
@@ -724,10 +853,6 @@
                             <button type="button" class="btn btn-outline" id="importDataBtn">
                                 <i class="fas fa-upload"></i> Importar Datos
                             </button>
-                            
-                            <button type="button" class="btn btn-outline" id="backupGistBtn">
-                                <i class="fas fa-cloud-download-alt"></i> Descargar Backup del Gist
-                            </button>
                         </div>
                         
                         <div class="alert alert-warning mt-3">
@@ -754,7 +879,11 @@
         </div>
     </footer>
 
-    <!-- Scripts locales -->
+    <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="api.js"></script>
+    <script src="script.js"></script>
+    
     <script>
         // Año actual
         document.getElementById('yearAdmin').textContent = new Date().getFullYear();
@@ -768,6 +897,7 @@
         document.querySelectorAll('.nav-list a').forEach(link => {
             link.addEventListener('click', () => {
                 document.querySelector('.nav-list').classList.remove('active');
+                document.getElementById('nav-toggle').checked = false;
             });
         });
 
@@ -785,27 +915,14 @@
                 
                 reader.onload = function(e) {
                     const previewItem = document.createElement('div');
-                    previewItem.className = 'preview-item';
                     
                     const img = document.createElement('img');
                     img.src = e.target.result;
                     img.alt = file.name;
                     img.title = file.name;
-                    
-                    const removeBtn = document.createElement('button');
-                    removeBtn.className = 'remove-img';
-                    removeBtn.innerHTML = '×';
-                    removeBtn.onclick = function() {
-                        previewItem.remove();
-                        // También eliminar del input files
-                        const dataTransfer = new DataTransfer();
-                        const remainingFiles = Array.from(event.target.files).filter((f, index) => index !== i);
-                        remainingFiles.forEach(f => dataTransfer.items.add(f));
-                        event.target.files = dataTransfer.files;
-                    };
+                    img.className = 'preview-image';
                     
                     previewItem.appendChild(img);
-                    previewItem.appendChild(removeBtn);
                     preview.appendChild(previewItem);
                 }
                 
@@ -875,51 +992,6 @@
                 document.getElementById(`tab-${tabId}`).classList.add('active');
             });
         });
-
-        // Función para mostrar notificación
-        function mostrarNotificacion(mensaje, tipo = 'success') {
-            const notificacion = document.createElement('div');
-            notificacion.className = `notification ${tipo}`;
-            notificacion.innerHTML = `
-                <i class="fas fa-${tipo === 'success' ? 'check-circle' : tipo === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-                <span>${mensaje}</span>
-            `;
-            
-            notificacion.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: ${tipo === 'success' ? 'var(--success)' : tipo === 'error' ? 'var(--danger)' : 'var(--info)'};
-                color: white;
-                padding: 15px 25px;
-                border-radius: var(--radius-md);
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                box-shadow: var(--shadow-xl);
-                z-index: 10000;
-                animation: slideInRight 0.3s ease;
-                max-width: 400px;
-            `;
-            
-            document.body.appendChild(notificacion);
-            
-            setTimeout(() => {
-                notificacion.style.animation = 'slideOutRight 0.3s ease';
-                setTimeout(() => notificacion.remove(), 300);
-            }, 3000);
-        }
-
-        window.mostrarNotificacion = mostrarNotificacion;
     </script>
-
-    <!-- Configuración -->
-    <script src="config.js"></script>
-    
-    <!-- API -->
-    <script src="api.js"></script>
-    
-    <!-- Script principal -->
-    <script src="script.js"></script>
 </body>
 </html>
