@@ -46,7 +46,7 @@ class TerrenosAPI {
         if (!this.gistEnabled) return;
         
         const token = GIST_CONFIG.apiKey;
-        if (!token || token.includes('TU_TOKEN') || token.length < 20) {
+        if (!token || token.includes('TU_TOKEN') || token.length < 10) {
             console.error('❌ Token Gist inválido o no configurado');
             this.gistEnabled = false;
             APP_CONFIG.STORAGE_MODE = 'local';
