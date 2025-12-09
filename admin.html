@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Administrador | Terrenos PY</title>
+
+    <!-- Fuentes y estilos -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <div class="logo">
+                <a href="index.html" class="brand-link">
+                    <img src="assets/logo.png" alt="Terrenos PY Logo" class="logo-img">
+                    <span>Terrenos PY</span>
+                </a>
+            </div>
+
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <label for="nav-toggle" class="nav-icon">
+                <i class="fas fa-bars"></i>
+            </label>
+
+            <ul class="nav-list admin-nav">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="admin.html" class="active">Administrador</a></li>
+                <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="admin-main container">
+        <h1 style="margin: 20px 0; color: var(--primary-color);">
+            <i class="fas fa-user-cog"></i> Panel de administración
+        </h1>
+
+        <!-- LOGIN -->
+        <section id="loginSection" class="login-section">
+            <h2><i class="fas fa-lock"></i> Acceso administrativo</h2>
+            <p style="text-align: center; margin-bottom: 30px; color: #666;">
+                Accede para administrar los terrenos
+            </p>
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="username"><i class="fas fa-user"></i> Usuario</label>
+                    <input type="text" id="username" placeholder="Usuario" required value="admin">
+                </div>
+                <div class="form-group">
+                    <label for="password"><i class="fas fa-lock"></i> Contraseña</label>
+                    <input type="password" id="password" placeholder="Contraseña" required value="admin123">
+                </div>
+                <button type="submit" class="btn-primary" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+                </button>
+                <div class="login-note">
+                    <p><i class="fas fa-info-circle"></i> Usuario: <b>admin</b> &nbsp;|&nbsp; Clave: <b>admin123</b></p>
+                </div>
+            </form>
+        </section>
+
+        <!-- DASHBOARD -->
+        <section id="dashboardSection" style="display:none;">
+            <!-- Formulario de terreno -->
+            <div class="property-form">
+                <h2><i class="fas fa-plus"></i> Agregar / editar terreno</h2>
+                
+                <form id="propertyForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="propTitle"><i class="fas fa-heading"></i> Título *</label>
+                            <input type="text" id="propTitle" placeholder="Ej: Terreno en Luque" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="propLocation"><i class="fas fa-map-marker-alt"></i> Ubicación *</label>
+                            <input type="text" id="propLocation" placeholder="Ciudad / Barrio" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="propPrice"><i class="fas fa-tag"></i> Precio (Gs.) *</label>
+                            <input type="number" id="propPrice" min="0" step="100000" placeholder="Ej: 95000000" required>
+                            <small>Ingresá sin puntos ni comas</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="propSize"><i class="fas fa-expand"></i> Superficie (m²) *</label>
+                            <input type="number" id="propSize" min="0" step="10" placeholder="Ej: 300" required>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="propDescription"><i class="fas fa-align-left"></i> Descripción *</label>
+                            <textarea id="propDescription" rows="4" placeholder="Descripción del terreno, servicios cercanos, acceso, etc." required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="propEmail"><i class="fas fa-envelope"></i> Email de contacto</label>
+                            <input type="email" id="propEmail" placeholder="correo@ejemplo.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="propPhone"><i class="fas fa-phone"></i> Teléfono</label>
+                            <input type="tel" id="propPhone" placeholder="+595984323438">
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="propImages"><i class="fas fa-images"></i> Imágenes del terreno</label>
+                            <input type="file" id="propImages" accept="image/*" multiple>
+                            <small>Seleccioná hasta 6 imágenes. La primera será la principal.</small>
+                            
+                            <!-- Contenedor para previsualización -->
+                            <div id="imagePreview" style="
+                                display: grid;
+                                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                                gap: 10px;
+                                margin-top: 15px;
+                            "></div>
+                        </div>
+
+                        <div class="form-group full-width">
+                            <label for="propMapLink"><i class="fas fa-map"></i> Enlace de Google Maps</label>
+                            <input type="url" id="propMapLink" placeholder="URL de Google Maps (opcional)">
+                            <small>Podés pegar el enlace de compartir de Google Maps.</small>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary" id="submitPropertyBtn">
+                        <i class="fas fa-save"></i> <span>Guardar terreno</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Listado de terrenos -->
+            <div class="admin-property-list">
+                <h2>
+                    <i class="fas fa-list"></i> Terrenos cargados
+                    <span id="propertyCount" style="
+                        font-size: 0.9rem;
+                        color: #fff;
+                        background: var(--accent-color);
+                        padding: 4px 12px;
+                        border-radius: 20px;
+                        margin-left: 10px;
+                    ">0 terrenos</span>
+                </h2>
+                
+                <div id="adminPropertiesContainer" class="properties-grid">
+                    <!-- Los terrenos se cargarán aquí -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-container">
+            <p>&copy; <span id="yearAdmin"></span> Terrenos PY</p>
+        </div>
+    </footer>
+
+    <!-- Scripts locales -->
+    <script>
+        // Año actual
+        document.getElementById('yearAdmin').textContent = new Date().getFullYear();
+
+        // Menú responsive
+        const navToggle = document.getElementById('nav-toggle');
+        const navList = document.querySelector('.nav-list');
+        if (navToggle && navList) {
+            navToggle.addEventListener('change', () => {
+                navList.classList.toggle('active', navToggle.checked);
+            });
+        }
+
+        // Previsualización de imágenes
+        document.getElementById('propImages').addEventListener('change', function(e) {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = '';
+            
+            const files = Array.from(this.files);
+            const maxFiles = Math.min(files.length, 6);
+            
+            for (let i = 0; i < maxFiles; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.style.cssText = `
+                        width: 100px;
+                        height: 100px;
+                        object-fit: cover;
+                        border-radius: 8px;
+                        border: 2px solid #e0e0e0;
+                        transition: all 0.3s ease;
+                    `;
+                    img.title = file.name;
+                    preview.appendChild(img);
+                }
+                
+                reader.readAsDataURL(file);
+            }
+            
+            if (files.length > 6) {
+                const warning = document.createElement('div');
+                warning.style.cssText = `
+                    grid-column: 1 / -1;
+                    color: #ff9800;
+                    font-size: 0.9rem;
+                    padding: 10px;
+                    background: rgba(255, 152, 0, 0.1);
+                    border-radius: 6px;
+                    margin-top: 10px;
+                `;
+                warning.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Solo se subirán las primeras 6 imágenes`;
+                preview.appendChild(warning);
+            }
+        });
+
+        // Función para mostrar notificación
+        function mostrarNotificacion(mensaje, tipo = 'success') {
+            const notificacion = document.createElement('div');
+            notificacion.className = 'notification';
+            notificacion.innerHTML = `
+                <i class="fas fa-${tipo === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
+                <span>${mensaje}</span>
+            `;
+            
+            notificacion.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${tipo === 'success' ? '#28a745' : '#dc3545'};
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            document.body.appendChild(notificacion);
+            
+            setTimeout(() => {
+                notificacion.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notificacion.remove(), 300);
+            }, 3000);
+        }
+
+        window.mostrarNotificacion = mostrarNotificacion;
+    </script>
+    <!-- En la sección de scripts, antes de script.js -->
+    <script src="config.js"></script>
+    <!-- AGREGAR ESTA LÍNEA -->
+    <script src="api.js"></script>
+  
+    <!-- Configuración -->
+    <script src="config.js"></script>
+    
+    <!-- Script principal -->
+    <script src="script.js"></script>
+</body>
+</html>
