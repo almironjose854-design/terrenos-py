@@ -1,22 +1,16 @@
 // script.js - Sistema principal mejorado
-// Versión 3.1 - Sin errores de recursión
+// Versión 3.1 - Funcional y sincronizado
 
 // Variables globales
 let propiedades = [];
 let editandoId = null;
 let currentUser = null;
 
-// ==================== FUNCIÓN DE NOTIFICACIÓN CORREGIDA ====================
+// ==================== FUNCIÓN DE NOTIFICACIÓN ====================
 
 function mostrarNotificacion(mensaje, tipo = 'success') {
-    // Evitar recursión: usar función diferente si ya existe
-    if (window.mostrarNotif) {
-        window.mostrarNotif(mensaje, tipo);
-        return;
-    }
-    
     try {
-        // Crear notificación simple
+        // Crear notificación
         const notificacion = document.createElement('div');
         notificacion.className = 'notification';
         
@@ -47,7 +41,7 @@ function mostrarNotificacion(mensaje, tipo = 'success') {
             gap: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
             z-index: 10000;
-            animation: slideIn 0.3s ease;
+            animation: slideInRight 0.3s ease;
             max-width: 400px;
         `;
         
@@ -56,7 +50,7 @@ function mostrarNotificacion(mensaje, tipo = 'success') {
         
         // Remover después de 3 segundos
         setTimeout(() => {
-            notificacion.style.animation = 'slideOut 0.3s ease';
+            notificacion.style.animation = 'slideOutRight 0.3s ease';
             setTimeout(() => {
                 if (notificacion.parentNode) {
                     notificacion.parentNode.removeChild(notificacion);
@@ -71,42 +65,6 @@ function mostrarNotificacion(mensaje, tipo = 'success') {
     }
 }
 
-// Hacer disponible globalmente con nombre diferente
-window.mostrarNotif = mostrarNotificacion;
-
-// ==================== INICIALIZACIÓN ====================
-
-document.addEventListener('DOMContentLoaded', async function() {
-    console.log('🚀 Terrenos PY - Iniciando aplicación...');
-    
-    // Mostrar estado de conexión
-    mostrarEstadoInicial();
-    
-    // Inicializar API
-    try {
-        propiedades = await terrenosAPI.init();
-        console.log(`✅ ${propiedades.length} terrenos cargados`);
-        
-        // Actualizar estadísticas si existen
-        actualizarEstadisticas();
-        
-    } catch (error) {
-        console.error('❌ Error inicializando API:', error);
-        mostrarNotificacion('Error cargando datos. Usando modo local.', 'warning');
-    }
-    
-    // Inicializar según la página
-    const path = window.location.pathname.split('/').pop();
-    
-    if (path === 'admin.html') {
-        inicializarAdmin();
-    } else if (path === 'property.html') {
-        inicializarDetalle();
-    } else {
-        inicializarHome();
-    }
-});
-
 // ==================== FUNCIONES DE UTILIDAD ====================
 
 function formatoNumero(num) {
@@ -119,23 +77,18 @@ function formatoPrecio(precio) {
     return `Gs. ${formatoNumero(precio)}`;
 }
 
-function mostrarEstadoInicial() {
-    const estado = terrenosAPI.getEstadoConexion();
-    console.log('📊 Estado del sistema:', estado);
-    
-    // Mostrar advertencia si hay errores de Gist
-    if (estado.errores.gistAuth || estado.errores.token) {
-        setTimeout(() => {
-            mostrarNotificacion('⚠️ Error con GitHub Gist. Usando almacenamiento local.', 'warning');
-        }, 1000);
-    }
-}
-
 function actualizarEstadisticas() {
     // Actualizar contador en hero si existe
     const totalElement = document.getElementById('totalTerrenos');
     if (totalElement) {
         totalElement.textContent = propiedades.length;
+    }
+    
+    // Actualizar destacados en hero si existe
+    const destacadosElement = document.getElementById('totalDestacados');
+    if (destacadosElement) {
+        const destacados = propiedades.filter(t => t.destacado).length;
+        destacadosElement.textContent = destacados;
     }
     
     // Actualizar en admin si existe
@@ -145,15 +98,39 @@ function actualizarEstadisticas() {
     }
     
     const destacados = propiedades.filter(t => t.destacado).length;
-    const destacadosElement = document.getElementById('destacadosCount');
-    if (destacadosElement) {
-        destacadosElement.textContent = destacados;
+    const destacadosAdminElement = document.getElementById('destacadosCount');
+    if (destacadosAdminElement) {
+        destacadosAdminElement.textContent = destacados;
     }
     
     const disponibles = propiedades.filter(t => t.estado === 'disponible').length;
     const disponiblesElement = document.getElementById('disponiblesCount');
     if (disponiblesElement) {
         disponiblesElement.textContent = disponibles;
+    }
+    
+    // Actualizar última sincronización
+    const lastSync = localStorage.getItem('terrenos_py_last_sync_v3');
+    if (lastSync) {
+        const lastSyncElement = document.getElementById('lastSync');
+        if (lastSyncElement) {
+            const fecha = new Date(lastSync);
+            const ahora = new Date();
+            const diffHoras = Math.floor((ahora - fecha) / (1000 * 60 * 60));
+            
+            let texto = '';
+            if (diffHoras < 1) {
+                texto = 'Hace menos de 1 hora';
+            } else if (diffHoras === 1) {
+                texto = 'Hace 1 hora';
+            } else if (diffHoras < 24) {
+                texto = `Hace ${diffHoras} horas`;
+            } else {
+                texto = fecha.toLocaleDateString();
+            }
+            
+            lastSyncElement.textContent = texto;
+        }
     }
 }
 
@@ -162,17 +139,24 @@ function actualizarEstadisticas() {
 function inicializarHome() {
     console.log('🏠 Inicializando página principal...');
     
-    // Renderizar terrenos
+    // Renderizar terrenos con animación
     const container = document.getElementById('propertiesContainer');
     if (container) {
-        renderizarTerrenosHome(container);
+        setTimeout(() => {
+            renderizarTerrenosHome(container);
+        }, 300);
     }
     
-    // Configurar búsqueda
+    // Configurar búsqueda con debounce
     const searchInput = document.getElementById('searchInput');
+    let searchTimeout;
+    
     if (searchInput) {
         searchInput.addEventListener('input', function() {
-            buscarTerrenos(this.value);
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                buscarTerrenos(this.value);
+            }, 300);
         });
     }
     
@@ -197,40 +181,8 @@ function inicializarHome() {
         });
     });
     
-    // Botón de sincronización
-    const syncBtn = document.getElementById('syncBtn');
-    if (syncBtn) {
-        syncBtn.addEventListener('click', async function() {
-            const originalHTML = this.innerHTML;
-            this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sincronizando...';
-            this.disabled = true;
-            
-            try {
-                await terrenosAPI.sincronizar();
-                propiedades = terrenosAPI.getTerrenos();
-                renderizarTerrenosHome(document.getElementById('propertiesContainer'));
-                mostrarNotificacion('✅ Sincronizado correctamente');
-            } catch (error) {
-                mostrarNotificacion('❌ Error sincronizando', 'error');
-            } finally {
-                this.innerHTML = originalHTML;
-                this.disabled = false;
-            }
-        });
-    }
-    
-    // Última sincronización
-    const lastSync = localStorage.getItem('terrenos_py_last_sync_v3');
-    if (lastSync) {
-        const lastSyncElement = document.getElementById('lastSync');
-        if (lastSyncElement) {
-            const fecha = new Date(lastSync);
-            lastSyncElement.textContent = `Última sincronización: ${fecha.toLocaleString()}`;
-        }
-    }
-    
-    // Cargar terrenos destacados
-    cargarDestacados();
+    // Inicializar estadísticas
+    actualizarEstadisticas();
 }
 
 function renderizarTerrenosHome(container) {
@@ -364,36 +316,6 @@ function crearTarjetaTerreno(terreno, esAdmin = false) {
         detailBtn.className = 'btn btn-primary property-detail-btn';
         detailBtn.innerHTML = '<i class="fas fa-eye"></i> Ver detalles';
         actions.appendChild(detailBtn);
-    } else {
-        const adminActions = document.createElement('div');
-        adminActions.className = 'admin-actions';
-        
-        const viewBtn = document.createElement('a');
-        viewBtn.href = `property.html?id=${terreno.id}`;
-        viewBtn.className = 'btn btn-small';
-        viewBtn.innerHTML = '<i class="fas fa-eye"></i>';
-        viewBtn.title = 'Ver detalles';
-        adminActions.appendChild(viewBtn);
-        
-        const editBtn = document.createElement('button');
-        editBtn.className = 'btn-edit';
-        editBtn.innerHTML = '<i class="fas fa-edit"></i> Editar';
-        editBtn.addEventListener('click', () => {
-            editarTerreno(terreno.id);
-        });
-        adminActions.appendChild(editBtn);
-        
-        const deleteBtn = document.createElement('button');
-        deleteBtn.className = 'btn-delete';
-        deleteBtn.innerHTML = '<i class="fas fa-trash"></i> Eliminar';
-        deleteBtn.addEventListener('click', async () => {
-            if (confirm('¿Estás seguro de eliminar este terreno?\n\nEsta acción no se puede deshacer.')) {
-                await eliminarTerreno(terreno.id);
-            }
-        });
-        adminActions.appendChild(deleteBtn);
-        
-        actions.appendChild(adminActions);
     }
     
     content.appendChild(actions);
@@ -483,30 +405,6 @@ function aplicarFiltro(filtro) {
     });
 }
 
-async function cargarDestacados() {
-    const container = document.getElementById('featuredContainer');
-    if (!container) return;
-    
-    const destacados = terrenosAPI.getTerrenosDestacados();
-    
-    if (destacados.length === 0) {
-        container.innerHTML = `
-            <div class="no-properties" style="grid-column: 1/-1;">
-                <i class="fas fa-star"></i>
-                <h3>No hay terrenos destacados</h3>
-                <p>Marca algunos terrenos como destacados en el panel de administración</p>
-            </div>
-        `;
-        return;
-    }
-    
-    container.innerHTML = '';
-    destacados.forEach(terreno => {
-        const card = crearTarjetaTerreno(terreno, false);
-        container.appendChild(card);
-    });
-}
-
 // ==================== PÁGINA DE DETALLE ====================
 
 function inicializarDetalle() {
@@ -533,7 +431,6 @@ async function cargarDetalleTerreno() {
     // Actualizar página
     actualizarPaginaDetalle(terreno);
     configurarCarrusel(terreno.imagenes);
-    configurarMapa(terreno.mapaUrl);
     configurarWhatsApp(terreno);
 }
 
@@ -543,9 +440,7 @@ function actualizarPaginaDetalle(terreno) {
         'detailTitle': terreno.titulo || 'Terreno',
         'detailPrice': formatoPrecio(terreno.precio),
         'detailDescription': terreno.descripcion || 'Sin descripción',
-        'detailLocationShort': terreno.ubicacion || 'Ubicación no disponible',
-        'detailSizeShort': terreno.tamaño ? `${formatoNumero(terreno.tamaño)} m²` : 'No especificado',
-        'detailPriceShort': formatoPrecio(terreno.precio)
+        'detailLocation': terreno.ubicacion || 'Ubicación no disponible'
     };
     
     Object.keys(elementos).forEach(id => {
@@ -557,31 +452,41 @@ function actualizarPaginaDetalle(terreno) {
     document.title = `${terreno.titulo} | Terrenos PY`;
     
     // Actualizar features si existen
-    const featuresContainer = document.querySelector('.property-features');
+    const featuresContainer = document.getElementById('propertyFeatures');
     if (featuresContainer) {
         featuresContainer.innerHTML = '';
         
         const features = [
-            { icon: 'map-marker-alt', label: 'Ubicación', value: terreno.ubicacion },
             { icon: 'expand', label: 'Tamaño', value: `${formatoNumero(terreno.tamaño)} m²` },
-            { icon: 'tag', label: 'Precio', value: formatoPrecio(terreno.precio) },
-            { icon: 'calendar', label: 'Publicado', value: new Date(terreno.fechaCreacion).toLocaleDateString() }
+            { icon: 'calendar', label: 'Publicado', value: new Date(terreno.fechaCreacion).toLocaleDateString() },
+            { icon: 'star', label: 'Estado', value: terreno.estado === 'disponible' ? 'Disponible' : 'Reservado' },
+            { icon: 'sync', label: 'Actualizado', value: new Date(terreno.fechaActualizacion).toLocaleDateString() }
         ];
         
         features.forEach(feature => {
             if (feature.value) {
                 const featureItem = document.createElement('div');
-                featureItem.className = 'feature-item';
+                featureItem.className = 'feature-extended';
                 featureItem.innerHTML = `
                     <i class="fas fa-${feature.icon}"></i>
-                    <div class="feature-content">
-                        <span class="feature-label">${feature.label}:</span>
-                        <span class="feature-value">${feature.value}</span>
-                    </div>
+                    <div class="value">${feature.value}</div>
+                    <div class="label">${feature.label}</div>
                 `;
                 featuresContainer.appendChild(featureItem);
             }
         });
+    }
+    
+    // Configurar mapa si existe
+    if (terreno.mapaUrl) {
+        const mapSection = document.getElementById('propertyMapSection');
+        if (mapSection) {
+            mapSection.style.display = 'block';
+            const mapIframe = document.getElementById('detailMap');
+            if (mapIframe) {
+                mapIframe.src = terreno.mapaUrl;
+            }
+        }
     }
 }
 
@@ -589,7 +494,8 @@ function configurarCarrusel(imagenes) {
     const imagenPrincipal = document.getElementById('detailImage');
     const btnAnterior = document.getElementById('prevImage');
     const btnSiguiente = document.getElementById('nextImage');
-    const dotsContainer = document.querySelector('.carousel-nav');
+    const dotsContainer = document.getElementById('carouselNav');
+    const thumbnailsContainer = document.getElementById('galleryThumbnails');
     
     if (!imagenPrincipal || !imagenes || imagenes.length === 0) {
         // Usar imagen por defecto
@@ -617,6 +523,21 @@ function configurarCarrusel(imagenes) {
                 dotsContainer.appendChild(dot);
             });
         }
+        
+        // Actualizar thumbnails
+        if (thumbnailsContainer) {
+            thumbnailsContainer.innerHTML = '';
+            imagenes.forEach((img, index) => {
+                const thumbnail = document.createElement('img');
+                thumbnail.src = img;
+                thumbnail.className = `thumbnail ${index === indiceActual ? 'active' : ''}`;
+                thumbnail.addEventListener('click', () => {
+                    indiceActual = index;
+                    actualizarImagen();
+                });
+                thumbnailsContainer.appendChild(thumbnail);
+            });
+        }
     }
     
     if (btnAnterior) {
@@ -636,28 +557,9 @@ function configurarCarrusel(imagenes) {
     actualizarImagen();
 }
 
-function configurarMapa(urlMapa) {
-    const iframeMapa = document.getElementById('detailMap');
-    if (!iframeMapa || !urlMapa) return;
-    
-    // Convertir URL de Google Maps a embed
-    let urlEmbed = urlMapa;
-    if (urlMapa.includes('/maps?') && !urlMapa.includes('/embed')) {
-        urlEmbed = urlMapa.replace('/maps?', '/maps/embed?');
-    } else if (urlMapa.includes('@')) {
-        // Coordenadas: -25.2820,-57.6351
-        const coords = urlMapa.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
-        if (coords) {
-            urlEmbed = `https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1000!2d${coords[2]}!3d${coords[1]}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses!2spy!4v${Date.now()}`;
-        }
-    }
-    
-    iframeMapa.src = urlEmbed;
-}
-
 function configurarWhatsApp(terreno) {
     const btnWhatsApp = document.getElementById('detailContactBtn');
-    if (!btnWhatsApp) return;
+    const sidebarBtn = document.getElementById('sidebarContactBtn');
     
     const mensaje = encodeURIComponent(
         `Hola! Estoy interesado en el terreno:\n\n` +
@@ -668,7 +570,10 @@ function configurarWhatsApp(terreno) {
         `Me gustaría más información.`
     );
     
-    btnWhatsApp.href = `https://wa.me/${SITE_CONFIG.whatsapp}?text=${mensaje}`;
+    const whatsappUrl = `https://wa.me/${SITE_CONFIG.whatsapp}?text=${mensaje}`;
+    
+    if (btnWhatsApp) btnWhatsApp.href = whatsappUrl;
+    if (sidebarBtn) sidebarBtn.href = whatsappUrl;
 }
 
 function mostrarError(mensaje) {
@@ -693,7 +598,6 @@ function inicializarAdmin() {
     
     configurarLogin();
     configurarFormulario();
-    configurarTabs();
     configurarSistema();
     
     // Verificar si ya está logueado
@@ -732,6 +636,8 @@ function configurarLogin() {
             // Cargar terrenos
             cargarTerrenosAdmin();
             actualizarEstadisticasAdmin();
+            
+            mostrarNotificacion('¡Bienvenido al panel de administración!', 'success');
             
         } else {
             mostrarNotificacion('Usuario o contraseña incorrectos', 'error');
@@ -808,7 +714,7 @@ function renderizarTablaAdmin(container) {
         
         // ID
         const tdId = document.createElement('td');
-        tdId.textContent = terreno.id.substring(0, 8) + '...';
+        tdId.textContent = terreno.id ? terreno.id.substring(0, 8) + '...' : 'N/A';
         row.appendChild(tdId);
         
         // Imagen
@@ -823,7 +729,7 @@ function renderizarTablaAdmin(container) {
         
         // Título
         const tdTitle = document.createElement('td');
-        tdTitle.innerHTML = `<strong>${terreno.titulo}</strong>`;
+        tdTitle.innerHTML = `<strong>${terreno.titulo || 'Sin título'}</strong>`;
         if (terreno.destacado) {
             tdTitle.innerHTML += '<br><small style="color: var(--accent-color);"><i class="fas fa-star"></i> Destacado</small>';
         }
@@ -831,7 +737,7 @@ function renderizarTablaAdmin(container) {
         
         // Ubicación
         const tdLocation = document.createElement('td');
-        tdLocation.textContent = terreno.ubicacion;
+        tdLocation.textContent = terreno.ubicacion || 'Sin ubicación';
         row.appendChild(tdLocation);
         
         // Precio
@@ -902,6 +808,17 @@ function actualizarEstadisticasAdmin() {
     if (syncElement && lastSync) {
         const fecha = new Date(lastSync);
         syncElement.textContent = fecha.toLocaleTimeString();
+    }
+    
+    // Sistema info
+    const sysTotalElement = document.getElementById('sysTotalTerrenos');
+    if (sysTotalElement) {
+        sysTotalElement.textContent = propiedades.length;
+    }
+    
+    const sysLastUpdate = document.getElementById('sysLastUpdate');
+    if (sysLastUpdate) {
+        sysLastUpdate.textContent = lastSync ? new Date(lastSync).toLocaleString() : 'Nunca';
     }
 }
 
@@ -1074,9 +991,8 @@ function editarTerreno(id) {
     document.getElementById('propDestacado').checked = terreno.destacado || false;
     
     // Cambiar texto del botón
-    const btn = document.getElementById('submitPropertyBtn');
-    const span = btn.querySelector('span');
-    if (span) span.textContent = 'Actualizar Terreno';
+    const btn = document.getElementById('submitBtnText');
+    if (btn) btn.textContent = 'Actualizar Terreno';
     
     // Mostrar botón cancelar
     const cancelBtn = document.getElementById('cancelEditBtn');
@@ -1097,6 +1013,12 @@ function editarTerreno(id) {
     // Scroll al formulario
     document.getElementById('propertyForm').scrollIntoView({ behavior: 'smooth' });
     
+    // Cambiar a pestaña agregar si no está activa
+    const tabBtn = document.querySelector('.tab-btn[data-tab="agregar"]');
+    if (tabBtn && !tabBtn.classList.contains('active')) {
+        tabBtn.click();
+    }
+    
     mostrarNotificacion(`Editando terreno: ${terreno.titulo}`, 'info');
 }
 
@@ -1107,9 +1029,8 @@ function limpiarFormulario() {
     editandoId = null;
     
     // Restaurar texto del botón
-    const btn = document.getElementById('submitPropertyBtn');
-    const span = btn.querySelector('span');
-    if (span) span.textContent = 'Guardar Terreno';
+    const btn = document.getElementById('submitBtnText');
+    if (btn) btn.textContent = 'Guardar Terreno';
     
     // Ocultar botón cancelar
     const cancelBtn = document.getElementById('cancelEditBtn');
@@ -1118,6 +1039,8 @@ function limpiarFormulario() {
     // Limpiar previsualización
     const preview = document.getElementById('imagePreview');
     if (preview) preview.innerHTML = '';
+    
+    mostrarNotificacion('Formulario limpiado', 'info');
 }
 
 async function eliminarTerreno(id) {
@@ -1148,22 +1071,6 @@ async function eliminarTerreno(id) {
     } catch (error) {
         mostrarNotificacion('❌ Error eliminando terreno: ' + error.message, 'error');
     }
-}
-
-function configurarTabs() {
-    const tabBtns = document.querySelectorAll('.tab-btn');
-    tabBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            // Remover activo de todos
-            tabBtns.forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-            
-            // Activar actual
-            this.classList.add('active');
-            const tabId = this.getAttribute('data-tab');
-            document.getElementById(`tab-${tabId}`).classList.add('active');
-        });
-    });
 }
 
 function configurarSistema() {
@@ -1237,6 +1144,34 @@ function configurarSistema() {
 }
 
 // ==================== INICIALIZACIÓN GLOBAL ====================
+
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('🚀 Terrenos PY - Iniciando aplicación...');
+    
+    // Inicializar API
+    try {
+        propiedades = await terrenosAPI.init();
+        console.log(`✅ ${propiedades.length} terrenos cargados`);
+        
+        // Actualizar estadísticas
+        actualizarEstadisticas();
+        
+    } catch (error) {
+        console.error('❌ Error inicializando API:', error);
+        mostrarNotificacion('Error cargando datos. Usando modo local.', 'warning');
+    }
+    
+    // Inicializar según la página
+    const path = window.location.pathname.split('/').pop();
+    
+    if (path === 'admin.html') {
+        inicializarAdmin();
+    } else if (path === 'property.html') {
+        inicializarDetalle();
+    } else {
+        inicializarHome();
+    }
+});
 
 // Asegurar que las funciones estén disponibles
 window.cargarTerrenosAdmin = cargarTerrenosAdmin;
