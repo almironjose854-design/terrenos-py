@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Detalle del Terreno | Terrenos PY</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Estilos propios -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav container">
+            <div class="logo">
+                <a href="index.html" class="brand-link">
+                    <img src="assets/logo.png" alt="Terrenos PY Logo" class="logo-img">
+                    <span>Terrenos PY</span>
+                </a>
+            </div>
+            
+            <input type="checkbox" id="nav-toggle" class="nav-toggle">
+            <label for="nav-toggle" class="nav-icon">
+                <i class="fas fa-bars"></i>
+            </label>
+            
+            <ul class="nav-list">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="index.html#listings">Terrenos</a></li>
+                <li><a href="admin.html">Administrador</a></li>
+                <li><a href="index.html#contacto">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Página de detalles -->
+    <main class="property-details-page">
+        <div class="container">
+            <!-- Botón de volver -->
+            <a href="index.html" class="back-button" style="margin-bottom: 30px; width: auto; display: inline-flex;">
+                <i class="fas fa-arrow-left"></i>
+                Volver a la lista
+            </a>
+            
+            <div class="details-layout">
+                <!-- Columna principal -->
+                <div class="details-main">
+                    <!-- Carrusel de imágenes -->
+                    <div class="carousel-container">
+                        <div class="carousel">
+                            <img id="detailImage" src="assets/default-property.jpg" alt="Imagen del terreno">
+                            <button id="prevImage" class="carousel-btn prev" aria-label="Imagen anterior">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button id="nextImage" class="carousel-btn next" aria-label="Siguiente imagen">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Información principal -->
+                    <div class="property-info">
+                        <h1 id="detailTitle">Cargando título...</h1>
+                        
+                        <div class="price-display">
+                            <span id="detailPrice">Cargando precio...</span>
+                        </div>
+                        
+                        <!-- Descripción -->
+                        <div class="property-description">
+                            <h2>Descripción</h2>
+                            <p id="detailDescription">Cargando descripción...</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Mapa -->
+                    <div class="property-map">
+                        <h2>Ubicación</h2>
+                        <div class="map-container">
+                            <iframe id="detailMap" 
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d235198.71694926206!2d-57.66868504812981!3d-25.30349989279924!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x945da99fc4c3d22d%3A0x46a53f6e049e7672!2sAsunci%C3%B3n%2C%20Paraguay!5e0!3m2!1ses-419!2s!4v1681234567890!5m2!1ses-419!2s"
+                                    allowfullscreen="" 
+                                    loading="lazy" 
+                                    referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Sidebar de contacto -->
+                <aside class="details-sidebar">
+                    <div class="contact-widget">
+                        <h2>¿Interesado en este terreno?</h2>
+                        
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span id="detailLocationShort">Ubicación no disponible</span>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <i class="fas fa-ruler-combined"></i>
+                                <span id="detailSizeShort">Superficie no disponible</span>
+                            </div>
+                            
+                            <div class="contact-item">
+                                <i class="fas fa-tag"></i>
+                                <span id="detailPriceShort">Precio no disponible</span>
+                            </div>
+                        </div>
+                        
+                        <a id="detailContactBtn" class="btn-primary whatsapp-btn" href="#" target="_blank">
+                            <i class="fab fa-whatsapp"></i>
+                            Consultar por WhatsApp
+                        </a>
+                        
+                        <p style="margin-top: 15px; font-size: 0.9rem; color: #666; text-align: center;">
+                            Respondemos en minutos
+                        </p>
+                    </div>
+                    
+                    <a href="index.html" class="back-button">
+                        <i class="fas fa-arrow-left"></i>
+                        Ver más terrenos
+                    </a>
+                </aside>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-left">
+                <h3>Terrenos PY</h3>
+                <p>Tu aliado confiable para encontrar el terreno perfecto en Paraguay. Conectamos compradores y vendedores de manera segura y eficiente.</p>
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-middle">
+                <h4>Enlaces rápidos</h4>
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Inicio</a></li>
+                    <li><a href="index.html#listings"><i class="fas fa-search"></i> Buscar Terrenos</a></li>
+                    <li><a href="admin.html"><i class="fas fa-user-cog"></i> Administrador</a></li>
+                    <li><a href="index.html#contacto"><i class="fas fa-envelope"></i> Contacto</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-right">
+                <h4>Contacto</h4>
+                <ul>
+                    <li><a href="tel:+595984323438"><i class="fas fa-phone"></i> +595 984 323 438</a></li>
+                    <li><a href="mailto:info@terrenospy.com"><i class="fas fa-envelope"></i> info@terrenospy.com</a></li>
+                    <li><a href="https://wa.me/595984323438" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a></li>
+                    <li><i class="fas fa-map-marker-alt"></i> Asunción, Paraguay</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; <span id="yearDetail"></span> Terrenos PY. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Año actual en el footer
+        document.getElementById('yearDetail').textContent = new Date().getFullYear();
+        
+        // Menú responsive
+        document.querySelector('.nav-icon').addEventListener('click', function() {
+            document.querySelector('.nav-list').classList.toggle('active');
+        });
+        
+        // Cerrar menú al hacer clic en un enlace
+        document.querySelectorAll('.nav-list a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.nav-list').classList.remove('active');
+            });
+        });
+    </script>
+
+    <!-- En la sección de scripts, antes de script.js -->
+    <script src="config.js"></script>
+    <!-- AGREGAR ESTA LÍNEA -->
+    <script src="api.js"></script>
+
+    <!-- Configuración -->
+    <script src="config.js"></script>
+    
+    <!-- Script principal -->
+    <script src="script.js"></script>
+</body>
+</html>
