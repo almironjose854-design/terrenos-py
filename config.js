@@ -13,14 +13,14 @@ const APP_CONFIG = {
     WHATSAPP: '595984323438',
     
     // Modo de almacenamiento: 'local' o 'gist'
-    STORAGE_MODE: 'local', // Cambiado a local temporalmente por error 401
+    STORAGE_MODE: 'gist',
     
-    // Imágenes por defecto
+    // Imágenes por defecto (Unsplash de alta calidad)
     DEFAULT_IMAGES: [
-        'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=800&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&auto=format&fit=crop&q=80',
-        'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w-800&auto=format&fit=crop&q=80'
+        'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=1200&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1200&auto=format&fit=crop&q=80',
+        'https://images.unsplash.com/photo-1518780664697-55e3ad937233?w=1200&auto=format&fit=crop&q=80'
     ],
     
     // Configuración adicional
@@ -34,21 +34,18 @@ const APP_CONFIG = {
     }
 };
 
-// 2. CONFIGURACIÓN GIST - CON TUS DATOS (modo fallback)
+// 2. CONFIGURACIÓN GIST - CON TUS DATOS REALES
 const GIST_CONFIG = {
-    id: '987fe85867a8107e905b4c9cb49ed6f3',
-    apiKey: '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',
+    id: '770df4e54817031edf7010bf70c3c2ad',
+    apiKey: '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',
     filename: 'terrenos-py.json',
-    gistUrl: 'https://gist.github.com/987fe85867a8107e905b4c9cb49ed6f3',
-    // Modo seguro: si falla Gist, usa localStorage
+    gistUrl: 'https://gist.github.com/almironjose854-design/770df4e54817031edf7010bf70c3c2ad',
     fallbackEnabled: true
 };
 
 // 3. CONFIGURACIÓN DE API
 const API_CONFIG = {
-    baseURL: window.location.origin.includes('vercel.app') 
-        ? window.location.origin 
-        : window.location.protocol + '//' + window.location.host,
+    baseURL: window.location.origin,
     endpoints: {
         gist: 'https://api.github.com/gists'
     },
@@ -102,4 +99,4 @@ window.verificarConfiguracion = verificarConfiguracion;
 const modoActual = verificarConfiguracion();
 console.log('✅ Terrenos PY - Configuración cargada');
 console.log('📊 Modo de almacenamiento:', modoActual);
-console.log('🔐 Modo seguro activado:', GIST_CONFIG.fallbackEnabled);
+console.log('🔐 Gist ID:', GIST_CONFIG.id ? GIST_CONFIG.id.substring(0, 8) + '...' : 'No configurado');
