@@ -1,19 +1,328 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Panel de administración Terrenos PY">
+    
     <title>Administrador | Terrenos PY</title>
-
-    <!-- Fuentes y estilos -->
+    
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Estilos -->
     <link rel="stylesheet" href="style.css">
     
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    
+    <style>
+        /* Estilos específicos para admin */
+        .admin-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: var(--space-md) 0;
+            margin-bottom: var(--space-xl);
+        }
+        
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+            margin-bottom: var(--space-xl);
+        }
+        
+        .stat-card {
+            background: white;
+            padding: var(--space-lg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            text-align: center;
+            transition: transform var(--transition-normal);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .stat-card i {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: var(--space-sm);
+        }
+        
+        .stat-card h3 {
+            font-size: 2rem;
+            margin: var(--space-xs) 0;
+            color: var(--primary-color);
+        }
+        
+        .stat-card p {
+            color: #718096;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: var(--space-xs);
+            margin-bottom: var(--space-xl);
+            background: white;
+            padding: var(--space-xs);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .tab-btn {
+            flex: 1;
+            padding: var(--space-md) var(--space-lg);
+            border: none;
+            background: none;
+            font-family: var(--font-headings);
+            font-weight: 600;
+            color: #718096;
+            cursor: pointer;
+            border-radius: var(--radius-md);
+            transition: all var(--transition-fast);
+        }
+        
+        .tab-btn.active {
+            background: var(--accent-color);
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .image-upload-area {
+            border: 2px dashed var(--accent-color);
+            border-radius: var(--radius-lg);
+            padding: var(--space-2xl);
+            text-align: center;
+            background: rgba(212, 175, 55, 0.05);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .image-upload-area:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: var(--accent-hover);
+        }
+        
+        .image-upload-area i {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: var(--space-md);
+        }
+        
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+        
+        .preview-item {
+            position: relative;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            aspect-ratio: 1;
+        }
+        
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .preview-item .remove-img {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(229, 62, 62, 0.9);
+            color: white;
+            border: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background var(--transition-fast);
+        }
+        
+        .preview-item .remove-img:hover {
+            background: var(--danger);
+        }
+        
+        .map-preview {
+            width: 100%;
+            height: 200px;
+            background: var(--light-gray);
+            border-radius: var(--radius-md);
+            margin-top: var(--space-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #718096;
+        }
+        
+        .alert {
+            padding: var(--space-md) var(--space-lg);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+        
+        .alert-success {
+            background: rgba(56, 161, 105, 0.1);
+            border: 1px solid rgba(56, 161, 105, 0.2);
+            color: var(--success);
+        }
+        
+        .alert-warning {
+            background: rgba(214, 158, 46, 0.1);
+            border: 1px solid rgba(214, 158, 46, 0.2);
+            color: var(--warning);
+        }
+        
+        .alert-error {
+            background: rgba(229, 62, 62, 0.1);
+            border: 1px solid rgba(229, 62, 62, 0.2);
+            color: var(--danger);
+        }
+        
+        .data-table {
+            width: 100%;
+            background: white;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            margin-top: var(--space-lg);
+        }
+        
+        .data-table th {
+            background: var(--light-color);
+            padding: var(--space-md) var(--space-lg);
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark-color);
+            border-bottom: 2px solid var(--light-gray);
+        }
+        
+        .data-table td {
+            padding: var(--space-md) var(--space-lg);
+            border-bottom: 1px solid var(--light-gray);
+            vertical-align: middle;
+        }
+        
+        .data-table tr:hover {
+            background: var(--light-color);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .status-available {
+            background: rgba(56, 161, 105, 0.1);
+            color: var(--success);
+        }
+        
+        .status-sold {
+            background: rgba(160, 174, 192, 0.1);
+            color: #718096;
+        }
+        
+        .status-reserved {
+            background: rgba(214, 158, 46, 0.1);
+            color: var(--warning);
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: var(--space-xs);
+        }
+        
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-size: 0.9rem;
+        }
+        
+        .action-edit {
+            background: rgba(49, 130, 206, 0.1);
+            color: var(--info);
+        }
+        
+        .action-edit:hover {
+            background: var(--info);
+            color: white;
+        }
+        
+        .action-delete {
+            background: rgba(229, 62, 62, 0.1);
+            color: var(--danger);
+        }
+        
+        .action-delete:hover {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .action-view {
+            background: rgba(56, 161, 105, 0.1);
+            color: var(--success);
+        }
+        
+        .action-view:hover {
+            background: var(--success);
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .admin-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .data-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- Header -->
@@ -26,135 +335,409 @@
                 </a>
             </div>
 
+            <!-- Menú móvil -->
             <input type="checkbox" id="nav-toggle" class="nav-toggle">
             <label for="nav-toggle" class="nav-icon">
                 <i class="fas fa-bars"></i>
             </label>
 
+            <!-- Navegación admin -->
             <ul class="nav-list admin-nav">
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="admin.html" class="active">Administrador</a></li>
+                <li><a href="index.html"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="admin.html" class="active"><i class="fas fa-user-cog"></i> Administrador</a></li>
                 <li><a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
             </ul>
+            
+            <!-- Estado del sistema -->
+            <div class="system-status" id="systemStatus">
+                <i class="fas fa-circle"></i>
+                <span>Cargando...</span>
+            </div>
         </nav>
     </header>
 
-    <main class="admin-main container">
-        <h1 style="margin: 20px 0; color: var(--primary-color);">
-            <i class="fas fa-user-cog"></i> Panel de administración
-        </h1>
+    <!-- Header admin -->
+    <div class="admin-header">
+        <div class="container">
+            <h1 style="color: white; margin: 0;">
+                <i class="fas fa-user-cog"></i> Panel de Administración
+            </h1>
+            <p style="color: rgba(255, 255, 255, 0.9); margin-top: var(--space-xs);">
+                Gestiona todos tus terrenos desde un solo lugar
+            </p>
+        </div>
+    </div>
 
+    <main class="admin-main container">
         <!-- LOGIN -->
         <section id="loginSection" class="login-section">
-            <h2><i class="fas fa-lock"></i> Acceso administrativo</h2>
-            <p style="text-align: center; margin-bottom: 30px; color: #666;">
-                Accede para administrar los terrenos
+            <h2><i class="fas fa-lock"></i> Acceso Administrativo</h2>
+            <p style="text-align: center; margin-bottom: var(--space-xl); color: #666;">
+                Accede con tus credenciales para administrar los terrenos
             </p>
+            
             <form id="loginForm" class="login-form">
                 <div class="form-group">
                     <label for="username"><i class="fas fa-user"></i> Usuario</label>
-                    <input type="text" id="username" placeholder="Usuario" required value="admin">
+                    <input type="text" id="username" placeholder="Ingresa tu usuario" required value="admin">
                 </div>
+                
                 <div class="form-group">
                     <label for="password"><i class="fas fa-lock"></i> Contraseña</label>
-                    <input type="password" id="password" placeholder="Contraseña" required value="admin123">
+                    <input type="password" id="password" placeholder="Ingresa tu contraseña" required value="admin123">
                 </div>
-                <button type="submit" class="btn-primary" id="loginBtn">
-                    <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+                
+                <button type="submit" class="btn btn-primary" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
                 </button>
+                
                 <div class="login-note">
-                    <p><i class="fas fa-info-circle"></i> Usuario: <b>admin</b> &nbsp;|&nbsp; Clave: <b>admin123</b></p>
+                    <p><i class="fas fa-info-circle"></i> Credenciales por defecto:</p>
+                    <p><b>Usuario:</b> admin &nbsp;|&nbsp; <b>Contraseña:</b> admin123</p>
                 </div>
             </form>
         </section>
 
         <!-- DASHBOARD -->
         <section id="dashboardSection" style="display:none;">
-            <!-- Formulario de terreno -->
-            <div class="property-form">
-                <h2><i class="fas fa-plus"></i> Agregar / editar terreno</h2>
+            <!-- Estadísticas -->
+            <div class="admin-stats">
+                <div class="stat-card">
+                    <i class="fas fa-home"></i>
+                    <h3 id="totalTerrenosCount">0</h3>
+                    <p>Total Terrenos</p>
+                </div>
                 
-                <form id="propertyForm">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="propTitle"><i class="fas fa-heading"></i> Título *</label>
-                            <input type="text" id="propTitle" placeholder="Ej: Terreno en Luque" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="propLocation"><i class="fas fa-map-marker-alt"></i> Ubicación *</label>
-                            <input type="text" id="propLocation" placeholder="Ciudad / Barrio" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="propPrice"><i class="fas fa-tag"></i> Precio (Gs.) *</label>
-                            <input type="number" id="propPrice" min="0" step="100000" placeholder="Ej: 95000000" required>
-                            <small>Ingresá sin puntos ni comas</small>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="propSize"><i class="fas fa-expand"></i> Superficie (m²) *</label>
-                            <input type="number" id="propSize" min="0" step="10" placeholder="Ej: 300" required>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label for="propDescription"><i class="fas fa-align-left"></i> Descripción *</label>
-                            <textarea id="propDescription" rows="4" placeholder="Descripción del terreno, servicios cercanos, acceso, etc." required></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="propEmail"><i class="fas fa-envelope"></i> Email de contacto</label>
-                            <input type="email" id="propEmail" placeholder="correo@ejemplo.com">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="propPhone"><i class="fas fa-phone"></i> Teléfono</label>
-                            <input type="tel" id="propPhone" placeholder="+595984323438">
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label for="propImages"><i class="fas fa-images"></i> Imágenes del terreno</label>
-                            <input type="file" id="propImages" accept="image/*" multiple>
-                            <small>Seleccioná hasta 6 imágenes. La primera será la principal.</small>
-                            
-                            <!-- Contenedor para previsualización -->
-                            <div id="imagePreview" style="
-                                display: grid;
-                                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-                                gap: 10px;
-                                margin-top: 15px;
-                            "></div>
-                        </div>
-
-                        <div class="form-group full-width">
-                            <label for="propMapLink"><i class="fas fa-map"></i> Enlace de Google Maps</label>
-                            <input type="url" id="propMapLink" placeholder="URL de Google Maps (opcional)">
-                            <small>Podés pegar el enlace de compartir de Google Maps.</small>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn-primary" id="submitPropertyBtn">
-                        <i class="fas fa-save"></i> <span>Guardar terreno</span>
-                    </button>
-                </form>
+                <div class="stat-card">
+                    <i class="fas fa-star"></i>
+                    <h3 id="destacadosCount">0</h3>
+                    <p>Destacados</p>
+                </div>
+                
+                <div class="stat-card">
+                    <i class="fas fa-check-circle"></i>
+                    <h3 id="disponiblesCount">0</h3>
+                    <p>Disponibles</p>
+                </div>
+                
+                <div class="stat-card">
+                    <i class="fas fa-sync-alt"></i>
+                    <h3 id="ultimaSync">-</h3>
+                    <p>Última Sincronización</p>
+                </div>
             </div>
 
-            <!-- Listado de terrenos -->
-            <div class="admin-property-list">
-                <h2>
-                    <i class="fas fa-list"></i> Terrenos cargados
-                    <span id="propertyCount" style="
-                        font-size: 0.9rem;
-                        color: #fff;
-                        background: var(--accent-color);
-                        padding: 4px 12px;
-                        border-radius: 20px;
-                        margin-left: 10px;
-                    ">0 terrenos</span>
-                </h2>
-                
-                <div id="adminPropertiesContainer" class="properties-grid">
-                    <!-- Los terrenos se cargarán aquí -->
+            <!-- Pestañas -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="agregar">Agregar Terreno</button>
+                <button class="tab-btn" data-tab="listar">Ver Terrenos</button>
+                <button class="tab-btn" data-tab="config">Configuración</button>
+            </div>
+
+            <!-- Contenido de pestañas -->
+            <div class="tab-content active" id="tab-agregar">
+                <!-- Formulario de terreno -->
+                <div class="property-form">
+                    <h2><i class="fas fa-plus"></i> Agregar / Editar Terreno</h2>
+                    
+                    <div id="formAlert" style="display: none;"></div>
+                    
+                    <form id="propertyForm">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="propTitle"><i class="fas fa-heading"></i> Título *</label>
+                                <input type="text" id="propTitle" placeholder="Ej: Terreno Residencial en Luque" required>
+                                <small>Un título claro y descriptivo</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="propLocation"><i class="fas fa-map-marker-alt"></i> Ubicación *</label>
+                                <input type="text" id="propLocation" placeholder="Ciudad / Barrio / Zona" required>
+                                <small>Especifica la ubicación exacta</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="propPrice"><i class="fas fa-tag"></i> Precio (Gs.) *</label>
+                                <input type="number" id="propPrice" min="0" step="100000" placeholder="Ej: 95000000" required>
+                                <small>Ingresá sin puntos ni comas</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="propSize"><i class="fas fa-expand"></i> Superficie (m²) *</label>
+                                <input type="number" id="propSize" min="0" step="10" placeholder="Ej: 300" required>
+                                <small>Superficie total en metros cuadrados</small>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="propDescription"><i class="fas fa-align-left"></i> Descripción *</label>
+                                <textarea id="propDescription" rows="4" placeholder="Describe el terreno, servicios cercanos, acceso, características especiales, etc." required></textarea>
+                                <small>Sé detallado para atraer más interesados</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="propEmail"><i class="fas fa-envelope"></i> Email de contacto</label>
+                                <input type="email" id="propEmail" placeholder="correo@ejemplo.com" value="info@terrenospy.com">
+                                <small>Email para consultas</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="propPhone"><i class="fas fa-phone"></i> Teléfono</label>
+                                <input type="tel" id="propPhone" placeholder="+595984323438" value="+595984323438">
+                                <small>Teléfono para consultas</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="propEstado"><i class="fas fa-circle"></i> Estado</label>
+                                <select id="propEstado">
+                                    <option value="disponible">Disponible</option>
+                                    <option value="reservado">Reservado</option>
+                                    <option value="vendido">Vendido</option>
+                                </select>
+                                <small>Estado actual del terreno</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="propDestacado">
+                                    <input type="checkbox" id="propDestacado">
+                                    <i class="fas fa-star"></i> Destacado
+                                </label>
+                                <small>Aparecerá en la sección destacados</small>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="propImages"><i class="fas fa-images"></i> Imágenes del terreno</label>
+                                
+                                <div class="image-upload-area" id="imageUploadArea">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <h4>Arrastra imágenes aquí o haz clic para seleccionar</h4>
+                                    <p>Formatos: JPG, PNG, GIF (Máx. 5MB por imagen)</p>
+                                    <p>Máximo 6 imágenes. La primera será la principal.</p>
+                                    <button type="button" class="btn btn-outline mt-3" onclick="document.getElementById('propImages').click()">
+                                        <i class="fas fa-folder-open"></i> Seleccionar Archivos
+                                    </button>
+                                </div>
+                                
+                                <input type="file" 
+                                       id="propImages" 
+                                       accept="image/*" 
+                                       multiple 
+                                       style="display: none;"
+                                       onchange="handleImageSelection(event)">
+                                
+                                <!-- Contenedor para previsualización -->
+                                <div id="imagePreview" class="preview-grid"></div>
+                                
+                                <small>Seleccioná hasta 6 imágenes. Recomendamos imágenes de buena calidad.</small>
+                            </div>
+
+                            <div class="form-group full-width">
+                                <label for="propMapLink"><i class="fas fa-map"></i> Enlace de Google Maps</label>
+                                <input type="url" id="propMapLink" placeholder="https://maps.google.com/?q=-25.2820,-57.6351">
+                                <small>Pegá el enlace de compartir de Google Maps</small>
+                                
+                                <div id="mapPreview" class="map-preview">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>Vista previa del mapa aparecerá aquí</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary" id="cancelEditBtn" style="display: none;">
+                                <i class="fas fa-times"></i> Cancelar Edición
+                            </button>
+                            
+                            <button type="submit" class="btn btn-primary" id="submitPropertyBtn">
+                                <i class="fas fa-save"></i> <span>Guardar Terreno</span>
+                            </button>
+                            
+                            <button type="button" class="btn btn-outline" id="clearFormBtn">
+                                <i class="fas fa-broom"></i> Limpiar Formulario
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Pestaña Listar Terrenos -->
+            <div class="tab-content" id="tab-listar">
+                <div class="admin-property-list">
+                    <h2>
+                        <i class="fas fa-list"></i> Terrenos Cargados
+                        <span class="property-count" id="propertyCount">0 terrenos</span>
+                    </h2>
+                    
+                    <!-- Filtros y búsqueda -->
+                    <div class="search-container" style="margin-bottom: var(--space-xl);">
+                        <div class="search-bar">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="adminSearchInput" placeholder="Buscar terrenos...">
+                            <button class="search-btn" id="adminSearchBtn">
+                                <i class="fas fa-search"></i> Buscar
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Tabla de terrenos -->
+                    <div class="data-table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Imagen</th>
+                                    <th>Título</th>
+                                    <th>Ubicación</th>
+                                    <th>Precio</th>
+                                    <th>Tamaño</th>
+                                    <th>Estado</th>
+                                    <th>Última Actualización</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminPropertiesTable">
+                                <!-- Los terrenos se cargarán aquí -->
+                                <tr>
+                                    <td colspan="9" style="text-align: center; padding: var(--space-2xl);">
+                                        <div class="loading">
+                                            <div class="spinner"></div>
+                                            <p>Cargando terrenos...</p>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Paginación -->
+                    <div class="pagination" id="pagination" style="display: none; margin-top: var(--space-xl);">
+                        <button class="btn btn-outline" id="prevPageBtn">
+                            <i class="fas fa-chevron-left"></i> Anterior
+                        </button>
+                        <span id="pageInfo">Página 1 de 1</span>
+                        <button class="btn btn-outline" id="nextPageBtn">
+                            Siguiente <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pestaña Configuración -->
+            <div class="tab-content" id="tab-config">
+                <div class="property-form">
+                    <h2><i class="fas fa-cogs"></i> Configuración del Sistema</h2>
+                    
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <div>
+                            <strong>Atención:</strong> Los cambios en esta sección afectan el funcionamiento del sistema.
+                            Procede con precaución.
+                        </div>
+                    </div>
+                    
+                    <div class="config-grid">
+                        <div class="config-section">
+                            <h3><i class="fas fa-database"></i> Almacenamiento</h3>
+                            <div class="form-group">
+                                <label for="storageMode">Modo de Almacenamiento</label>
+                                <select id="storageMode" disabled>
+                                    <option value="gist" selected>GitHub Gist (Recomendado)</option>
+                                    <option value="local">Local Storage</option>
+                                </select>
+                                <small>Sistema configurado para usar GitHub Gist</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Estado de Conexión Gist</label>
+                                <div id="gistStatus" class="status-badge status-available">
+                                    <i class="fas fa-circle"></i> Conectado
+                                </div>
+                                <small>ID del Gist: <code id="gistIdDisplay">987fe85867a8107e905b4c9cb49ed6f3</code></small>
+                            </div>
+                            
+                            <button type="button" class="btn btn-outline" id="testGistBtn">
+                                <i class="fas fa-vial"></i> Probar Conexión Gist
+                            </button>
+                        </div>
+                        
+                        <div class="config-section">
+                            <h3><i class="fas fa-sync-alt"></i> Sincronización</h3>
+                            <div class="form-group">
+                                <label>Última Sincronización</label>
+                                <div id="lastSyncDisplay">No sincronizado</div>
+                                <small>La sincronización automática ocurre cada 2 minutos</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="autoSync">Sincronización Automática</label>
+                                <select id="autoSync">
+                                    <option value="enabled" selected>Activada</option>
+                                    <option value="disabled">Desactivada</option>
+                                </select>
+                            </div>
+                            
+                            <button type="button" class="btn btn-primary" id="manualSyncBtn">
+                                <i class="fas fa-sync-alt"></i> Sincronizar Ahora
+                            </button>
+                            
+                            <button type="button" class="btn btn-outline" id="clearCacheBtn">
+                                <i class="fas fa-trash"></i> Limpiar Caché
+                            </button>
+                        </div>
+                        
+                        <div class="config-section full-width">
+                            <h3><i class="fas fa-info-circle"></i> Información del Sistema</h3>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <strong>Versión:</strong> <span>3.0.0</span>
+                                </div>
+                                <div class="info-item">
+                                    <strong>Total Terrenos:</strong> <span id="sysTotalTerrenos">0</span>
+                                </div>
+                                <div class="info-item">
+                                    <strong>Última Actualización:</strong> <span id="sysLastUpdate">-</span>
+                                </div>
+                                <div class="info-item">
+                                    <strong>Estado:</strong> <span class="status-badge status-available">Operativo</span>
+                                </div>
+                            </div>
+                            
+                            <div class="alert alert-success mt-4">
+                                <i class="fas fa-check-circle"></i>
+                                <div>
+                                    <strong>Sistema operativo correctamente</strong>
+                                    <p style="margin: 4px 0 0 0; font-size: 0.9em;">
+                                        Todos los servicios funcionan como se espera.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Exportar/Importar -->
+                    <div class="config-section full-width mt-5">
+                        <h3><i class="fas fa-file-export"></i> Exportar / Importar Datos</h3>
+                        <div class="export-actions">
+                            <button type="button" class="btn btn-outline" id="exportDataBtn">
+                                <i class="fas fa-download"></i> Exportar Todos los Datos
+                            </button>
+                            
+                            <button type="button" class="btn btn-outline" id="importDataBtn">
+                                <i class="fas fa-upload"></i> Importar Datos
+                            </button>
+                            
+                            <button type="button" class="btn btn-outline" id="backupGistBtn">
+                                <i class="fas fa-cloud-download-alt"></i> Descargar Backup del Gist
+                            </button>
+                        </div>
+                        
+                        <div class="alert alert-warning mt-3">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <div>
+                                <strong>Backup Automático:</strong> Los datos se respaldan automáticamente en GitHub Gist.
+                                No es necesario hacer backups manuales.
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -162,7 +745,12 @@
 
     <footer class="footer">
         <div class="container footer-container">
-            <p>&copy; <span id="yearAdmin"></span> Terrenos PY</p>
+            <div class="text-center" style="grid-column: 1 / -1;">
+                <p>&copy; <span id="yearAdmin"></span> Terrenos PY - Panel de Administración</p>
+                <p style="font-size: 0.9rem; margin-top: 8px; opacity: 0.7;">
+                    <i class="fas fa-shield-alt"></i> Área restringida - Acceso autorizado solamente
+                </p>
+            </div>
         </div>
     </footer>
 
@@ -172,20 +760,23 @@
         document.getElementById('yearAdmin').textContent = new Date().getFullYear();
 
         // Menú responsive
-        const navToggle = document.getElementById('nav-toggle');
-        const navList = document.querySelector('.nav-list');
-        if (navToggle && navList) {
-            navToggle.addEventListener('change', () => {
-                navList.classList.toggle('active', navToggle.checked);
+        document.querySelector('.nav-icon').addEventListener('click', function() {
+            document.querySelector('.nav-list').classList.toggle('active');
+        });
+        
+        // Cerrar menú al hacer clic en enlace
+        document.querySelectorAll('.nav-list a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.querySelector('.nav-list').classList.remove('active');
             });
-        }
+        });
 
-        // Previsualización de imágenes
-        document.getElementById('propImages').addEventListener('change', function(e) {
+        // Funciones para manejo de imágenes
+        function handleImageSelection(event) {
             const preview = document.getElementById('imagePreview');
             preview.innerHTML = '';
             
-            const files = Array.from(this.files);
+            const files = Array.from(event.target.files);
             const maxFiles = Math.min(files.length, 6);
             
             for (let i = 0; i < maxFiles; i++) {
@@ -193,18 +784,29 @@
                 const reader = new FileReader();
                 
                 reader.onload = function(e) {
+                    const previewItem = document.createElement('div');
+                    previewItem.className = 'preview-item';
+                    
                     const img = document.createElement('img');
                     img.src = e.target.result;
-                    img.style.cssText = `
-                        width: 100px;
-                        height: 100px;
-                        object-fit: cover;
-                        border-radius: 8px;
-                        border: 2px solid #e0e0e0;
-                        transition: all 0.3s ease;
-                    `;
+                    img.alt = file.name;
                     img.title = file.name;
-                    preview.appendChild(img);
+                    
+                    const removeBtn = document.createElement('button');
+                    removeBtn.className = 'remove-img';
+                    removeBtn.innerHTML = '×';
+                    removeBtn.onclick = function() {
+                        previewItem.remove();
+                        // También eliminar del input files
+                        const dataTransfer = new DataTransfer();
+                        const remainingFiles = Array.from(event.target.files).filter((f, index) => index !== i);
+                        remainingFiles.forEach(f => dataTransfer.items.add(f));
+                        event.target.files = dataTransfer.files;
+                    };
+                    
+                    previewItem.appendChild(img);
+                    previewItem.appendChild(removeBtn);
+                    preview.appendChild(previewItem);
                 }
                 
                 reader.readAsDataURL(file);
@@ -214,24 +816,72 @@
                 const warning = document.createElement('div');
                 warning.style.cssText = `
                     grid-column: 1 / -1;
-                    color: #ff9800;
+                    color: var(--warning);
                     font-size: 0.9rem;
                     padding: 10px;
-                    background: rgba(255, 152, 0, 0.1);
-                    border-radius: 6px;
+                    background: rgba(214, 158, 46, 0.1);
+                    border-radius: var(--radius-md);
                     margin-top: 10px;
+                    text-align: center;
                 `;
                 warning.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Solo se subirán las primeras 6 imágenes`;
                 preview.appendChild(warning);
             }
+        }
+
+        // Arrastrar y soltar imágenes
+        const imageUploadArea = document.getElementById('imageUploadArea');
+        const propImagesInput = document.getElementById('propImages');
+        
+        if (imageUploadArea) {
+            imageUploadArea.addEventListener('click', () => {
+                propImagesInput.click();
+            });
+            
+            imageUploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                imageUploadArea.style.background = 'rgba(212, 175, 55, 0.15)';
+                imageUploadArea.style.borderColor = 'var(--accent-hover)';
+            });
+            
+            imageUploadArea.addEventListener('dragleave', () => {
+                imageUploadArea.style.background = 'rgba(212, 175, 55, 0.05)';
+                imageUploadArea.style.borderColor = 'var(--accent-color)';
+            });
+            
+            imageUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                imageUploadArea.style.background = 'rgba(212, 175, 55, 0.05)';
+                imageUploadArea.style.borderColor = 'var(--accent-color)';
+                
+                if (e.dataTransfer.files.length) {
+                    propImagesInput.files = e.dataTransfer.files;
+                    const event = new Event('change');
+                    propImagesInput.dispatchEvent(event);
+                }
+            });
+        }
+
+        // Pestañas
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Remover activo de todos
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                // Activar actual
+                this.classList.add('active');
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(`tab-${tabId}`).classList.add('active');
+            });
         });
 
         // Función para mostrar notificación
         function mostrarNotificacion(mensaje, tipo = 'success') {
             const notificacion = document.createElement('div');
-            notificacion.className = 'notification';
+            notificacion.className = `notification ${tipo}`;
             notificacion.innerHTML = `
-                <i class="fas fa-${tipo === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
+                <i class="fas fa-${tipo === 'success' ? 'check-circle' : tipo === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
                 <span>${mensaje}</span>
             `;
             
@@ -239,35 +889,35 @@
                 position: fixed;
                 top: 20px;
                 right: 20px;
-                background: ${tipo === 'success' ? '#28a745' : '#dc3545'};
+                background: ${tipo === 'success' ? 'var(--success)' : tipo === 'error' ? 'var(--danger)' : 'var(--info)'};
                 color: white;
                 padding: 15px 25px;
-                border-radius: 8px;
+                border-radius: var(--radius-md);
                 display: flex;
                 align-items: center;
                 gap: 10px;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                box-shadow: var(--shadow-xl);
                 z-index: 10000;
-                animation: slideIn 0.3s ease;
+                animation: slideInRight 0.3s ease;
+                max-width: 400px;
             `;
             
             document.body.appendChild(notificacion);
             
             setTimeout(() => {
-                notificacion.style.animation = 'slideOut 0.3s ease';
+                notificacion.style.animation = 'slideOutRight 0.3s ease';
                 setTimeout(() => notificacion.remove(), 300);
             }, 3000);
         }
 
         window.mostrarNotificacion = mostrarNotificacion;
     </script>
-    <!-- En la sección de scripts, antes de script.js -->
-    <script src="config.js"></script>
-    <!-- AGREGAR ESTA LÍNEA -->
-    <script src="api.js"></script>
-  
+
     <!-- Configuración -->
     <script src="config.js"></script>
+    
+    <!-- API -->
+    <script src="api.js"></script>
     
     <!-- Script principal -->
     <script src="script.js"></script>
