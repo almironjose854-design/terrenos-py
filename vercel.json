@@ -3,17 +3,15 @@
   "builds": [
     { "src": "*.html", "use": "@vercel/static" },
     { "src": "*.css", "use": "@vercel/static" },
-    { "src": "*.js", "use": "@vercel/static" },
-    { "src": "assets/*", "use": "@vercel/static" }
+    { "src": "*.js", "use": "@vercel/static" }
   ],
   "routes": [
+    { "src": "/assets/(.*)", "dest": "/$1" },
     { 
       "src": "/(.*)", 
       "dest": "/index.html",
       "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type"
+        "Cache-Control": "public, max-age=0, must-revalidate"
       }
     }
   ]
