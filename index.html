@@ -1,37 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="Plataforma líder para comprar y vender terrenos en Paraguay. Encuentra tu terreno ideal con seguridad y confianza.">
-    <meta name="keywords" content="terrenos, paraguay, compra, venta, inmobiliaria, propiedades, lotes, asunción">
-    <meta name="author" content="Terrenos PY">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://terrenos-py.vercel.app/">
-    <meta property="og:title" content="Terrenos PY - Compra y Venta de Terrenos en Paraguay">
-    <meta property="og:description" content="Encuentra el terreno ideal para tu proyecto en Paraguay">
-    <meta property="og:image" content="https://terrenos-py.vercel.app/assets/og-image.jpg">
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://terrenos-py.vercel.app/">
-    <meta property="twitter:title" content="Terrenos PY - Compra y Venta de Terrenos en Paraguay">
-    <meta property="twitter:description" content="Encuentra el terreno ideal para tu proyecto en Paraguay">
-    <meta property="twitter:image" content="https://terrenos-py.vercel.app/assets/og-image.jpg">
-    
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Terrenos PY - Compra y Venta de Terrenos en Paraguay</title>
-    
-    <!-- Preload críticos -->
-    <link rel="preload" href="style.css" as="style">
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" as="style" crossorigin>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -40,127 +18,129 @@
     <link rel="stylesheet" href="style.css">
     
     <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon/favicon-16x16.png">
-    <link rel="manifest" href="assets/favicon/site.webmanifest">
+    <link rel="icon" type="image/x-icon" href="https://img.icons8.com/color/96/000000/land-sales.png">
     
-    <!-- Scripts críticos -->
-    <script>
-        // Estado de carga
-        document.documentElement.classList.add('loading');
+    <style>
+        /* Estilos adicionales específicos para index */
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+        }
         
-        // Prevenir FOUC
-        (function() {
-            var style = document.createElement('style');
-            style.textContent = '.no-js { display: none !important; }';
-            document.head.appendChild(style);
-        })();
-    </script>
+        .stat-item {
+            text-align: center;
+            color: white;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .no-properties {
+            text-align: center;
+            padding: 60px 20px;
+            grid-column: 1 / -1;
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .no-properties i {
+            font-size: 4rem;
+            color: var(--light-gray);
+            margin-bottom: 20px;
+        }
+        
+        .no-properties h3 {
+            color: var(--dark-color);
+            margin-bottom: 10px;
+        }
+        
+        .no-properties p {
+            color: var(--gray);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+    </style>
 </head>
-<body class="loading">
-    <!-- Estado de carga -->
-    <div class="loading-overlay" style="display: none;">
-        <div class="spinner"></div>
-        <p>Cargando Terrenos PY...</p>
-    </div>
-
+<body>
     <!-- Header -->
     <header class="header">
         <nav class="nav container">
             <div class="logo">
                 <a href="index.html" class="brand-link">
-                    <img src="assets/logo.png" alt="Terrenos PY Logo" class="logo-img" width="40" height="40">
+                    <img src="https://img.icons8.com/color/96/000000/land-sales.png" alt="Terrenos PY Logo" class="logo-img">
                     <span>Terrenos PY</span>
                 </a>
             </div>
             
-            <!-- Menú móvil -->
             <input type="checkbox" id="nav-toggle" class="nav-toggle">
             <label for="nav-toggle" class="nav-icon">
                 <i class="fas fa-bars"></i>
-                <i class="fas fa-times"></i>
             </label>
             
-            <!-- Navegación -->
             <ul class="nav-list">
-                <li><a href="#inicio" class="active"><i class="fas fa-home"></i> Inicio</a></li>
-                <li><a href="#listings"><i class="fas fa-search"></i> Buscar Terrenos</a></li>
-                <li><a href="admin.html"><i class="fas fa-user-cog"></i> Administrador</a></li>
-                <li><a href="#contacto"><i class="fas fa-envelope"></i> Contacto</a></li>
-                <li class="nav-cta">
-                    <a href="https://wa.me/595984323438?text=Hola!%20Quiero%20publicar%20mi%20terreno" 
-                       class="btn btn-whatsapp btn-small" 
-                       target="_blank">
-                        <i class="fab fa-whatsapp"></i> Publicar Terreno
-                    </a>
-                </li>
+                <li><a href="index.html" class="active">Inicio</a></li>
+                <li><a href="#listings">Terrenos</a></li>
+                <li><a href="admin.html">Administrador</a></li>
+                <li><a href="#contacto">Contacto</a></li>
             </ul>
-            
-            <!-- Estado de conexión -->
-            <div class="connection-status" id="connectionStatus" style="display: none;">
-                <i class="fas fa-wifi"></i>
-                <span>Conectado</span>
-            </div>
         </nav>
     </header>
 
     <!-- Hero -->
     <section class="hero" id="inicio">
         <div class="hero-content container">
-            <div class="hero-text fade-in-up">
-                <h1>Encuentra el terreno ideal para tu proyecto</h1>
-                <p>La plataforma líder en Paraguay para comprar y vender terrenos con confianza, rapidez y seguridad. Miles de clientes confían en nosotros.</p>
-                
-                <div class="hero-buttons">
-                    <a href="#listings" class="btn btn-primary">
-                        <i class="fas fa-search"></i>
-                        Explorar Terrenos
-                    </a>
-                    <a href="https://wa.me/595984323438?text=Hola!%20Me%20interesa%20publicar%20mi%20terreno" 
-                       class="btn btn-whatsapp" 
-                       target="_blank">
-                        <i class="fab fa-whatsapp"></i>
-                        Publicar tu Terreno
-                    </a>
-                </div>
+            <h1>Encuentra el terreno ideal para tu proyecto</h1>
+            <p>La plataforma líder en Paraguay para comprar y vender terrenos con confianza, rapidez y seguridad.</p>
+            <div class="hero-buttons">
+                <a href="https://wa.me/595984323438?text=Hola!%20Me%20gustaría%20publicar%20mi%20terreno%20con%20ustedes" 
+                   class="btn btn-whatsapp" 
+                   target="_blank">
+                    <i class="fab fa-whatsapp"></i>
+                    Publica tu terreno
+                </a>
+                <a href="#listings" class="btn btn-secondary">
+                    <i class="fas fa-search"></i>
+                    Explorar Terrenos
+                </a>
             </div>
             
-            <!-- Estadísticas -->
-            <div class="hero-stats fade-in-up delay-2">
+            <div class="hero-stats">
                 <div class="stat-item">
-                    <h3><span id="totalTerrenos">0</span>+</h3>
-                    <p>Terrenos Disponibles</p>
+                    <span class="stat-number" id="totalTerrenos">0</span>
+                    <span class="stat-label">Terrenos Activos</span>
                 </div>
                 <div class="stat-item">
-                    <h3><span id="clientesSatisfechos">500</span>+</h3>
-                    <p>Clientes Satisfechos</p>
+                    <span class="stat-number" id="totalDestacados">0</span>
+                    <span class="stat-label">Destacados</span>
                 </div>
                 <div class="stat-item">
-                    <h3>100%</h3>
-                    <p>Seguridad Garantizada</p>
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Seguro</span>
                 </div>
             </div>
-        </div>
-        
-        <!-- Olas decorativas -->
-        <div class="wave wave-top">
-            <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
-                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"></path>
-            </svg>
         </div>
     </section>
 
     <!-- Listados -->
     <section class="listings-section" id="listings">
         <div class="container">
-            <div class="section-title fade-in-up">
-                <h2>Terrenos Disponibles</h2>
-                <p class="section-subtitle">Explora nuestra selección de los mejores terrenos en Paraguay. Actualizados en tiempo real.</p>
-            </div>
+            <h2 class="section-title">Terrenos Disponibles</h2>
+            <p class="section-subtitle">Explora nuestra selección de los mejores terrenos en Paraguay</p>
             
-            <!-- Barra de búsqueda -->
-            <div class="search-container fade-in-up delay-1">
+            <div class="search-container">
                 <div class="search-bar">
                     <i class="fas fa-search"></i>
                     <input type="text" 
@@ -170,96 +150,64 @@
                         <i class="fas fa-search"></i> Buscar
                     </button>
                 </div>
-                
-                <!-- Filtros rápidos -->
-                <div class="quick-filters" id="quickFilters">
+            </div>
+            
+            <!-- Filtros rápidos -->
+            <div class="filters-container">
+                <div class="filters">
                     <button class="filter-btn active" data-filter="all">Todos</button>
                     <button class="filter-btn" data-filter="destacados">Destacados</button>
-                    <button class="filter-btn" data-filter="baratos">Más Baratos</button>
-                    <button class="filter-btn" data-filter="grandes">Más Grandes</button>
+                    <button class="filter-btn" data-filter="baratos">Menor Precio</button>
+                    <button class="filter-btn" data-filter="grandes">Mayor Tamaño</button>
                 </div>
             </div>
             
-            <!-- Contenedor de propiedades -->
             <div id="propertiesContainer" class="properties-grid">
                 <!-- Las tarjetas se cargarán aquí dinámicamente -->
                 <div class="loading">
                     <div class="spinner"></div>
-                    <h3>Cargando terrenos...</h3>
-                    <p>Buscando las mejores opciones para ti</p>
+                    <p>Cargando terrenos...</p>
                 </div>
             </div>
             
-            <!-- Mensaje cuando no hay resultados -->
-            <div id="noResults" class="no-results" style="display: none;">
+            <div id="noResults" class="no-properties" style="display: none;">
                 <i class="fas fa-search"></i>
                 <h3>No se encontraron resultados</h3>
-                <p>Intenta con otros términos de búsqueda o contacta con nosotros</p>
-                <a href="#contacto" class="btn btn-primary mt-4">Contactar Asesor</a>
-            </div>
-            
-            <!-- Botón ver más -->
-            <div class="text-center mt-5" id="loadMoreContainer" style="display: none;">
-                <button id="loadMoreBtn" class="btn btn-outline">
-                    <i class="fas fa-plus"></i> Cargar Más Terrenos
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Destacados -->
-    <section class="featured-section" style="background: var(--light-color); padding: var(--space-3xl) 0;">
-        <div class="container">
-            <div class="section-title fade-in-up">
-                <h2>Terrenos Destacados</h2>
-                <p class="section-subtitle">Las mejores oportunidades del mercado seleccionadas para ti</p>
-            </div>
-            
-            <div id="featuredContainer" class="properties-grid">
-                <!-- Terrenos destacados se cargarán aquí -->
+                <p>Intenta con otros términos de búsqueda o filtros diferentes</p>
             </div>
         </div>
     </section>
 
     <!-- Por qué elegirnos -->
-    <section class="why-us-section" id="porque">
+    <section class="why-us-section">
         <div class="container">
-            <div class="section-title fade-in-up">
-                <h2>¿Por qué elegir Terrenos PY?</h2>
-                <p class="section-subtitle">Miles de clientes confían en nosotros para sus transacciones inmobiliarias</p>
-            </div>
+            <h2 class="section-title">¿Por qué elegir Terrenos PY?</h2>
+            <p class="section-subtitle">Miles de clientes confían en nosotros para sus transacciones inmobiliarias</p>
             
             <div class="why-us-grid">
-                <div class="why-item fade-in-up delay-1">
+                <div class="why-item">
                     <i class="fas fa-shield-alt"></i>
                     <h3>Seguridad Garantizada</h3>
-                    <p>Verificamos cada propiedad y asesoramos en todo el proceso legal para tu tranquilidad absoluta.</p>
+                    <p>Verificamos cada propiedad y asesoramos en todo el proceso legal para tu tranquilidad.</p>
                 </div>
                 
-                <div class="why-item fade-in-up delay-2">
+                <div class="why-item">
                     <i class="fas fa-bolt"></i>
                     <h3>Transacciones Rápidas</h3>
                     <p>Procesos optimizados que reducen los tiempos de compra-venta significativamente.</p>
                 </div>
                 
-                <div class="why-item fade-in-up delay-3">
+                <div class="why-item">
                     <i class="fas fa-handshake"></i>
                     <h3>Atención Personalizada</h3>
                     <p>Un asesor dedicado te acompaña desde el primer contacto hasta la entrega final.</p>
                 </div>
                 
-                <div class="why-item fade-in-up delay-4">
+                <div class="why-item">
                     <i class="fas fa-chart-line"></i>
                     <h3>Asesoría Experta</h3>
                     <p>Te ayudamos a tomar decisiones informadas con análisis de mercado y valoraciones precisas.</p>
                 </div>
-            </div>
-            
-            <!-- CTA -->
-            <div class="text-center mt-5 fade-in-up delay-5">
-                <a href="#contacto" class="btn btn-primary btn-large">
-                    <i class="fas fa-comments"></i> Consulta Gratuita
-                </a>
             </div>
         </div>
     </section>
@@ -267,57 +215,42 @@
     <!-- Contacto -->
     <section class="contact-section" id="contacto">
         <div class="container">
-            <div class="section-title fade-in-up">
-                <h2>Contáctanos</h2>
-                <p class="section-subtitle">Estamos aquí para ayudarte en lo que necesites</p>
-            </div>
+            <h2 class="section-title">Contáctanos</h2>
+            <p class="section-subtitle">Estamos aquí para ayudarte en lo que necesites</p>
             
-            <div class="contact-info-grid fade-in-up delay-1">
+            <div class="contact-info-grid">
                 <div class="contact-item">
                     <i class="fas fa-phone"></i>
                     <h3>Teléfono</h3>
-                    <p><a href="tel:+595984323438">+595 984 323 438</a></p>
-                    <p style="font-size: 0.9rem; opacity: 0.8;">Lunes a Viernes 8:00 - 18:00</p>
+                    <a href="tel:+595984323438">+595 984 323 438</a>
                 </div>
                 
                 <div class="contact-item">
                     <i class="fas fa-envelope"></i>
                     <h3>Email</h3>
-                    <p><a href="mailto:info@terrenospy.com">info@terrenospy.com</a></p>
-                    <p style="font-size: 0.9rem; opacity: 0.8;">Respondemos en menos de 24h</p>
+                    <a href="mailto:info@terrenospy.com">info@terrenospy.com</a>
+                </div>
+                
+                <div class="contact-item">
+                    <i class="fab fa-whatsapp"></i>
+                    <h3>WhatsApp</h3>
+                    <a href="https://wa.me/595984323438" target="_blank">Chatear ahora</a>
                 </div>
                 
                 <div class="contact-item">
                     <i class="fas fa-map-marker-alt"></i>
                     <h3>Ubicación</h3>
                     <p>Asunción, Paraguay</p>
-                    <p style="font-size: 0.9rem; opacity: 0.8;">Cobertura en todo el país</p>
                 </div>
             </div>
             
-            <div class="contact-info-only fade-in-up delay-2">
-                <div class="contact-buttons">
-                    <a href="https://wa.me/595984323438?text=Hola!%20Me%20gustaría%20más%20información%20sobre%20Terrenos%20PY" 
-                       class="btn btn-whatsapp btn-large" 
-                       target="_blank">
-                        <i class="fab fa-whatsapp"></i>
-                        Chatear por WhatsApp
-                    </a>
-                    
-                    <a href="mailto:info@terrenospy.com?subject=Consulta%20Terrenos%20PY" 
-                       class="btn btn-secondary btn-large">
-                        <i class="fas fa-envelope"></i>
-                        Enviar Email
-                    </a>
-                </div>
-                
-                <!-- Redes sociales -->
-                <div class="social-links mt-5">
-                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                    <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                </div>
+            <div class="contact-info-only">
+                <a href="https://wa.me/595984323438?text=Hola!%20Me%20gustaría%20más%20información%20sobre%20Terrenos%20PY" 
+                   class="btn btn-whatsapp" 
+                   target="_blank">
+                    <i class="fab fa-whatsapp"></i>
+                    Chatear por WhatsApp
+                </a>
             </div>
         </div>
     </section>
@@ -326,12 +259,7 @@
     <footer class="footer">
         <div class="container footer-container">
             <div class="footer-left">
-                <div class="logo">
-                    <a href="index.html" class="brand-link">
-                        <img src="assets/logo.png" alt="Terrenos PY Logo" class="logo-img" width="40" height="40">
-                        <span>Terrenos PY</span>
-                    </a>
-                </div>
+                <h3>Terrenos PY</h3>
                 <p>Tu plataforma confiable para la compra y venta de terrenos en Paraguay. Conectamos sueños con oportunidades.</p>
                 <div class="social-links">
                     <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
@@ -344,9 +272,8 @@
             <div class="footer-middle">
                 <h4>Enlaces rápidos</h4>
                 <ul>
-                    <li><a href="#inicio"><i class="fas fa-home"></i> Inicio</a></li>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Inicio</a></li>
                     <li><a href="#listings"><i class="fas fa-search"></i> Buscar Terrenos</a></li>
-                    <li><a href="#porque"><i class="fas fa-star"></i> Por qué elegirnos</a></li>
                     <li><a href="admin.html"><i class="fas fa-user-cog"></i> Administrador</a></li>
                     <li><a href="#contacto"><i class="fas fa-envelope"></i> Contacto</a></li>
                 </ul>
@@ -360,66 +287,52 @@
                     <li><a href="https://wa.me/595984323438" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a></li>
                     <li><i class="fas fa-map-marker-alt"></i> Asunción, Paraguay</li>
                 </ul>
-                
-                <!-- Botón de sincronización -->
-                <div class="sync-status mt-4">
-                    <button id="syncBtn" class="btn btn-small btn-outline" style="font-size: 0.8rem;">
-                        <i class="fas fa-sync-alt"></i> Sincronizar
-                    </button>
-                    <small id="lastSync" style="display: block; margin-top: 8px; opacity: 0.7;"></small>
-                </div>
             </div>
         </div>
         
         <div class="footer-bottom">
             <p>&copy; <span id="year"></span> Terrenos PY. Todos los derechos reservados.</p>
-            <p style="font-size: 0.8rem; margin-top: 8px; opacity: 0.6;">
-                <i class="fas fa-heart" style="color: #ff6b6b;"></i> Desarrollado con pasión en Paraguay
+            <p style="font-size: 0.9rem; margin-top: 8px; opacity: 0.7;">
+                <i class="fas fa-sync-alt"></i> Última sincronización: <span id="lastSync">-</span>
             </p>
         </div>
     </footer>
 
-    <!-- Botón flotante WhatsApp -->
-    <a href="https://wa.me/595984323438?text=Hola!%20Vi%20tu%20sitio%20Terrenos%20PY" 
-       class="whatsapp-float" 
-       target="_blank"
-       aria-label="Chatear por WhatsApp">
-        <i class="fab fa-whatsapp"></i>
-    </a>
-
-    <!-- Botón volver arriba -->
-    <button id="backToTop" class="back-to-top" aria-label="Volver arriba">
-        <i class="fas fa-chevron-up"></i>
-    </button>
-
     <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="api.js"></script>
+    <script src="script.js"></script>
+    
     <script>
-        // Eliminar clase de carga
-        document.documentElement.classList.remove('loading');
-        document.querySelector('.loading-overlay').style.display = 'none';
-        
         // Año actual
         document.getElementById('year').textContent = new Date().getFullYear();
         
         // Menú responsive
         const navToggle = document.getElementById('nav-toggle');
         const navList = document.querySelector('.nav-list');
+        const navIcon = document.querySelector('.nav-icon');
         
-        if (navToggle && navList) {
-            navToggle.addEventListener('change', () => {
-                navList.classList.toggle('active', navToggle.checked);
-                document.body.style.overflow = navToggle.checked ? 'hidden' : '';
+        navIcon.addEventListener('click', function() {
+            navList.classList.toggle('active');
+        });
+        
+        // Cerrar menú al hacer clic en enlace
+        document.querySelectorAll('.nav-list a').forEach(link => {
+            link.addEventListener('click', () => {
+                navList.classList.remove('active');
+                navToggle.checked = false;
             });
-            
-            // Cerrar menú al hacer clic en enlace
-            document.querySelectorAll('.nav-list a').forEach(link => {
-                link.addEventListener('click', () => {
-                    navToggle.checked = false;
-                    navList.classList.remove('active');
-                    document.body.style.overflow = '';
-                });
-            });
-        }
+        });
+        
+        // Header con scroll
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
         
         // Smooth scroll para enlaces internos
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -430,75 +343,17 @@
                 
                 const targetElement = document.querySelector(targetId);
                 if(targetElement) {
+                    // Cerrar menú móvil si está abierto
+                    navList.classList.remove('active');
+                    navToggle.checked = false;
+                    
                     window.scrollTo({
-                        top: targetElement.offsetTop - 100,
+                        top: targetElement.offsetTop - 80,
                         behavior: 'smooth'
                     });
                 }
             });
         });
-        
-        // Botón volver arriba
-        const backToTop = document.getElementById('backToTop');
-        if (backToTop) {
-            window.addEventListener('scroll', () => {
-                if (window.pageYOffset > 300) {
-                    backToTop.classList.add('visible');
-                } else {
-                    backToTop.classList.remove('visible');
-                }
-            });
-            
-            backToTop.addEventListener('click', () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-        }
-        
-        // Estado de conexión
-        function updateConnectionStatus() {
-            const statusElement = document.getElementById('connectionStatus');
-            if (!statusElement) return;
-            
-            const isOnline = navigator.onLine;
-            statusElement.style.display = 'flex';
-            statusElement.innerHTML = `
-                <i class="fas fa-${isOnline ? 'wifi' : 'signal-slash'}"></i>
-                <span>${isOnline ? 'Conectado' : 'Sin conexión'}</span>
-            `;
-            statusElement.className = `connection-status ${isOnline ? 'online' : 'offline'}`;
-        }
-        
-        window.addEventListener('online', updateConnectionStatus);
-        window.addEventListener('offline', updateConnectionStatus);
-        updateConnectionStatus();
-        
-        // Animaciones al hacer scroll
-        function checkScroll() {
-            const elements = document.querySelectorAll('.fade-in-up');
-            elements.forEach(element => {
-                const position = element.getBoundingClientRect();
-                if (position.top < window.innerHeight - 100) {
-                    element.classList.add('animated');
-                }
-            });
-        }
-        
-        window.addEventListener('scroll', checkScroll);
-        window.addEventListener('load', checkScroll);
-    </script>
-
-    <!-- Configuración y scripts principales -->
-    <script src="config.js"></script>
-    <script src="api.js"></script>
-    <script src="script.js"></script>
-    
-    <!-- Google Analytics (opcional) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-XXXXXXX');
     </script>
 </body>
 </html>
