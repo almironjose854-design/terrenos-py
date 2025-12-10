@@ -21,7 +21,7 @@
     <link rel="stylesheet" href="style.css">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="https://img.icons8.com/color/96/000000/land-sales.png">
     
     <style>
         /* Estilos específicos para la página de detalle */
@@ -198,7 +198,19 @@
             margin-top: var(--space-3xl);
         }
         
-        @media (max-width: 768px) {
+        .details-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: var(--space-2xl);
+            margin-top: var(--space-lg);
+        }
+        
+        @media (max-width: 1024px) {
+            .details-layout {
+                grid-template-columns: 1fr;
+                gap: var(--space-xl);
+            }
+            
             .property-header {
                 padding: 120px 0 40px;
             }
@@ -220,6 +232,49 @@
                 text-align: center;
             }
         }
+        
+        @media (max-width: 768px) {
+            .property-features-extended {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .property-features-extended {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .price-display {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--accent-color);
+            margin: var(--space-lg) 0;
+            padding: var(--space-lg) 0;
+            border-top: 2px solid rgba(255, 255, 255, 0.3);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all var(--transition-normal);
+            margin-bottom: var(--space-xl);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateX(-5px);
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -228,7 +283,7 @@
         <nav class="nav container">
             <div class="logo">
                 <a href="index.html" class="brand-link">
-                    <img src="assets/logo.png" alt="Terrenos PY Logo" class="logo-img">
+                    <img src="https://img.icons8.com/color/96/000000/land-sales.png" alt="Terrenos PY Logo" class="logo-img">
                     <span>Terrenos PY</span>
                 </a>
             </div>
@@ -251,7 +306,7 @@
     <div class="property-header" id="propertyHeader">
         <div class="container property-header-content">
             <!-- Botón de volver -->
-            <a href="index.html#listings" class="back-button" style="margin-bottom: 30px; width: auto; display: inline-flex; background: rgba(255,255,255,0.2); color: white;">
+            <a href="index.html#listings" class="back-button">
                 <i class="fas fa-arrow-left"></i>
                 Volver a la lista
             </a>
@@ -262,7 +317,7 @@
                 <span>Ubicación no disponible</span>
             </div>
             
-            <div class="price-display" id="detailPrice" style="border: none; padding: 0; margin: var(--space-lg) 0; color: var(--accent-color);">
+            <div class="price-display" id="detailPrice">
                 Cargando precio...
             </div>
             
@@ -306,7 +361,7 @@
                     <!-- Carrusel de imágenes -->
                     <div class="carousel-container">
                         <div class="carousel">
-                            <img id="detailImage" src="assets/default-property.jpg" alt="Imagen del terreno" loading="lazy">
+                            <img id="detailImage" src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=1200&auto=format&fit=crop&q=80" alt="Imagen del terreno" loading="lazy">
                             <button id="prevImage" class="carousel-btn prev" aria-label="Imagen anterior">
                                 <i class="fas fa-chevron-left"></i>
                             </button>
@@ -338,15 +393,10 @@
                                 Cargando descripción...
                             </div>
                         </div>
-                        
-                        <!-- Características adicionales -->
-                        <div class="additional-features" id="additionalFeatures" style="margin-top: var(--space-xl);">
-                            <!-- Características adicionales se cargarán aquí -->
-                        </div>
                     </div>
                     
                     <!-- Mapa -->
-                    <div class="property-map" id="propertyMapSection">
+                    <div class="property-map" id="propertyMapSection" style="display: none;">
                         <h2><i class="fas fa-map-marker-alt"></i> Ubicación</h2>
                         <div class="map-container">
                             <iframe id="detailMap" 
@@ -396,7 +446,7 @@
                     </div>
                     
                     <!-- Terrenos similares -->
-                    <div class="similar-properties" id="similarProperties">
+                    <div class="similar-properties" id="similarProperties" style="display: none;">
                         <h2>Terrenos Similares</h2>
                         <div class="properties-grid" id="similarPropertiesGrid">
                             <!-- Los terrenos similares se cargarán aquí -->
@@ -471,7 +521,7 @@
                         </div>
                     </div>
                     
-                    <a href="index.html#listings" class="back-button" style="margin-top: var(--space-xl);">
+                    <a href="index.html#listings" class="back-button" style="margin-top: var(--space-xl); background: var(--white); color: var(--dark-color); border-color: var(--light-gray);">
                         <i class="fas fa-arrow-left"></i>
                         Ver más terrenos
                     </a>
@@ -521,6 +571,10 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="config.js"></script>
+    <script src="api.js"></script>
+    <script src="script.js"></script>
+    
     <script>
         // Año actual en el footer
         document.getElementById('yearDetail').textContent = new Date().getFullYear();
@@ -534,6 +588,7 @@
         document.querySelectorAll('.nav-list a').forEach(link => {
             link.addEventListener('click', () => {
                 document.querySelector('.nav-list').classList.remove('active');
+                document.getElementById('nav-toggle').checked = false;
             });
         });
         
@@ -573,14 +628,5 @@
             }
         });
     </script>
-
-    <!-- Configuración -->
-    <script src="config.js"></script>
-    
-    <!-- API -->
-    <script src="api.js"></script>
-    
-    <!-- Script principal -->
-    <script src="script.js"></script>
 </body>
 </html>
