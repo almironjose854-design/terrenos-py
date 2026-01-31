@@ -1,13 +1,83 @@
 {
   "terrenos": [
     {
+      "id": "t1769870208161bz1f11t4q",
+      "titulo": "馃挜Hermoso d煤plex a estrenar  en villa Elisa鉂�",
+      "ubicacion": "Villa Elisa - Villa Bonita",
+      "precio": "525000000",
+      "moneda": "Gs.",
+      "tama帽o": "120",
+      "descripcion": "馃挜Vendo hermoso d煤plex a estrenar  en villa Elisa鉂梊n馃攩Ubicado sobre la calle asfaltada Santa Teresa c/ Mar铆a auxiliadora del barrio villa bonita de villa Elisa  a 5 cuadras de la avda defensores del Chaco,con todo los servicios y varios acceso a  l铆neas de colectivos  ,supermercados y  farmacias \nLas  medidas del terreno son 5 x 24 : 120m2 y construidos 100m2\n鉁匛l mismo cuenta con :\nPlanta baja :\n*Entrada para dos veh铆culos \n*Port贸n b谩sculante \n*Sala \n*Cocina amobalda con anafe \n*Ba帽o social \n*Amplio patio con parrilla \n鉁匬lanta alta \n*Una habitaci贸n en suite y balc贸n \n*Dos habitaciones \n*Ba帽o compartido \nObs:t铆tulo a transferir \n鉁匒pto para cr茅dito bancario y che R贸ga pora \n馃攩Precio:GS 525.000.000 ",
+      "email": "wcinfoinmueblespy@gmail.com",
+      "telefono": "+595985282935",
+      "estado": "disponible",
+      "destacado": false,
+      "mapaUrl": "https://maps.app.goo.gl/SFT479CpocFvxpbw5",
+      "media": [
+        {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1769870200/terrenos_py/yrf0tj3rxgozvcbnxbvw.jpg"
+        },
+        {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1769870201/terrenos_py/xhiahimnh3zx3ohffo7t.jpg"
+        },
+        {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1769870201/terrenos_py/kbowblxncckbrvxwzlxf.jpg"
+        },
+        {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1769870202/terrenos_py/oqjrgm7plyloroepich6.jpg"
+        },
+        {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1769870203/terrenos_py/h3ymtojyuik0cj0ulyrf.jpg"
+        },
+        {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1769870203/terrenos_py/s4ejmduh0rgqeem38ogb.jpg"
+        },
+        {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1769870204/terrenos_py/ihcovayuqaswixjsmjmk.jpg"
+        },
+        {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1769870205/terrenos_py/ltry1n0nt2droqwi5cwn.jpg"
+        },
+        {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1769870206/terrenos_py/dpixtwgrpwy8usinuwaf.jpg"
+        },
+        {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1769870207/terrenos_py/otbfx4syadbhculwnqji.jpg"
+        }
+      ],
+      "imagenes": [
+        "https://res.cloudinary.com/daqgezuva/image/upload/v1769870200/terrenos_py/yrf0tj3rxgozvcbnxbvw.jpg",
+        "https://res.cloudinary.com/daqgezuva/image/upload/v1769870201/terrenos_py/xhiahimnh3zx3ohffo7t.jpg",
+        "https://res.cloudinary.com/daqgezuva/image/upload/v1769870201/terrenos_py/kbowblxncckbrvxwzlxf.jpg",
+        "https://res.cloudinary.com/daqgezuva/image/upload/v1769870202/terrenos_py/oqjrgm7plyloroepich6.jpg",
+        "https://res.cloudinary.com/daqgezuva/image/upload/v1769870203/terrenos_py/h3ymtojyuik0cj0ulyrf.jpg",
+        "https://res.cloudinary.com/daqgezuva/image/upload/v1769870203/terrenos_py/s4ejmduh0rgqeem38ogb.jpg",
+        "https://res.cloudinary.com/daqgezuva/image/upload/v1769870204/terrenos_py/ihcovayuqaswixjsmjmk.jpg",
+        "https://res.cloudinary.com/daqgezuva/image/upload/v1769870205/terrenos_py/ltry1n0nt2droqwi5cwn.jpg",
+        "https://res.cloudinary.com/daqgezuva/image/upload/v1769870206/terrenos_py/dpixtwgrpwy8usinuwaf.jpg",
+        "https://res.cloudinary.com/daqgezuva/image/upload/v1769870207/terrenos_py/otbfx4syadbhculwnqji.jpg"
+      ],
+      "fechaCreacion": "2026-01-31T14:36:48.161Z",
+      "fechaActualizacion": "2026-01-31T14:36:48.161Z"
+    },
+    {
       "id": "t1767962577147q2ujz2k1i",
-      "titulo": "Estancia Lapacho 6.555 Has. - Canindeyú",
-      "ubicacion": "Canindeyú",
+      "titulo": "Estancia Lapacho 6.555 Has. - Canindey煤",
+      "ubicacion": "Canindey煤",
       "precio": "9000",
       "moneda": "USD",
-      "tamaño": "65550000",
-      "descripcion": ".📍 ESTANCIA \"LAPACHO\" – 6.555 HECTÁREAS – CANINDEYÚ Oportunidad única de inversión en una de las zonas productivas con mayor proyección del país. Se ofrece en venta la Estancia Lapacho, con una superficie total de 6.555 hectáreas, ideal para producción ganadera, agrícola, forestal o desarrollo de proyectos de gran escala. 💰 Precio: 9.000 USD por hectárea 🏦 Financiación: Posibilidad de financiamiento bancario hasta 10 años 📄 Documentación: Título en mano 🔧 Incluye maquinaria y equipamiento de alto valor: ✈️ Avión Cessna 182 – 900 horas totales 🚜 Topadora Caterpillar D6T 🏗️ Pala cargadora Caterpillar 924K 🚜 5 tractores John Deere 6150 🛻 Camioneta Toyota Hilux doble cabina 🌱 Características destacadas: ✔️ Gran extensión continua ✔️ Infraestructura operativa incluida ✔️ Excelente proyección productiva ✔️ Apta para inversión, explotación agropecuaria o desarrollo integral ✔️ Operación segura con documentación al día Una propiedad de estas dimensiones, con equipamiento incluido y opción de financiamiento, representa una oportunidad excepcional para inversionistas y productores que buscan escala, proyección y respaldo patrimonial. 📲 Consultas y visitas a coordinar por privado.\n\n TOTAL: 58.955.000 USD",
+      "tama帽o": "65550000",
+      "descripcion": ".馃搷 ESTANCIA \"LAPACHO\" 鈥� 6.555 HECT脕REAS 鈥� CANINDEY脷 Oportunidad 煤nica de inversi贸n en una de las zonas productivas con mayor proyecci贸n del pa铆s. Se ofrece en venta la Estancia Lapacho, con una superficie total de 6.555 hect谩reas, ideal para producci贸n ganadera, agr铆cola, forestal o desarrollo de proyectos de gran escala. 馃挵 Precio: 9.000 USD por hect谩rea 馃彟 Financiaci贸n: Posibilidad de financiamiento bancario hasta 10 a帽os 馃搫 Documentaci贸n: T铆tulo en mano 馃敡 Incluye maquinaria y equipamiento de alto valor: 鉁堬笍 Avi贸n Cessna 182 鈥� 900 horas totales 馃殰 Topadora Caterpillar D6T 馃彈锔� Pala cargadora Caterpillar 924K 馃殰 5 tractores John Deere 6150 馃浕 Camioneta Toyota Hilux doble cabina 馃尡 Caracter铆sticas destacadas: 鉁旓笍 Gran extensi贸n continua 鉁旓笍 Infraestructura operativa incluida 鉁旓笍 Excelente proyecci贸n productiva 鉁旓笍 Apta para inversi贸n, explotaci贸n agropecuaria o desarrollo integral 鉁旓笍 Operaci贸n segura con documentaci贸n al d铆a Una propiedad de estas dimensiones, con equipamiento incluido y opci贸n de financiamiento, representa una oportunidad excepcional para inversionistas y productores que buscan escala, proyecci贸n y respaldo patrimonial. 馃摬 Consultas y visitas a coordinar por privado.\n\n TOTAL: 58.955.000 USD",
       "email": "infoinmueblespy@gmail.com",
       "telefono": "+595985282935",
       "estado": "disponible",
@@ -57,12 +127,12 @@
     },
     {
       "id": "t1768490922970akdov8cf9",
-      "titulo": "Oportunidad ÚNICA - Cabaña Santa Librada😍🌱🏡",
+      "titulo": "Oportunidad 脷NICA - Caba帽a Santa Librada馃槏馃尡馃彙",
       "ubicacion": "Distrito de Ybycui",
       "precio": "250000000",
       "moneda": "Gs.",
-      "tamaño": "1080000",
-      "descripcion": " OPORTUNIDAD ÚNICA – 108 HECTÁREAS EN YBYCUÍ, PARAGUARÍ\n\n📍 Ubicación: Distrito de Ybycuí, sobre ruta principal con mil metros de frente asfaltado.\n\n📐 Terreno: 108 hectáreas (1.080.000 m²) – total acceso asfaltado.\n💰 Precio: Consultar.\n\n✅ Infraestructura completa:\n\n✅ Casa patronal con 3 habitaciones (2 en suite), cocina, sala y comedor.\n\n✅ Cabaña independiente con 2 habitaciones y baño compartido.\n\n✅ Quincho con baño para eventos.\n\n✅ Casa para el capataz/personal.\n\n✅ Tinglado abierto para almacenamiento o talleres.\n\n✅ Corriente eléctrica y agua potable disponible.\n\n✅ 3 tajamares + pozo con bomba de agua.\n\n✅ Naciente natural de agua en el terreno.\n\n🌿 Entorno y extras:\n\n🌄 Vista panorámica al cerro.\n\n⚽ Campo de fútbol.\n\n🏫 Escuela ubicada al costado del terreno.\n\n🌳 Amplios espacios naturales, ideales para disfrute y recreación.\n\n📌 Ideal para:\n\nInversión a largo plazo\n\nQuinta familiar de fin de semana\n\nTurismo rural o ecológico\n\nEmprendimiento agropecuario o recreativo\n\nProyecto de loteamiento futuro\n\n📞 ¡Consultá precio y coordiná tu visita! Oportunidad con infraestructura lista y ubicación privilegiada.\n\n",
+      "tama帽o": "1080000",
+      "descripcion": " OPORTUNIDAD 脷NICA 鈥� 108 HECT脕REAS EN YBYCU脥, PARAGUAR脥\n\n馃搷 Ubicaci贸n: Distrito de Ybycu铆, sobre ruta principal con mil metros de frente asfaltado.\n\n馃搻 Terreno: 108 hect谩reas (1.080.000 m虏) 鈥� total acceso asfaltado.\n馃挵 Precio: Consultar.\n\n鉁� Infraestructura completa:\n\n鉁� Casa patronal con 3 habitaciones (2 en suite), cocina, sala y comedor.\n\n鉁� Caba帽a independiente con 2 habitaciones y ba帽o compartido.\n\n鉁� Quincho con ba帽o para eventos.\n\n鉁� Casa para el capataz/personal.\n\n鉁� Tinglado abierto para almacenamiento o talleres.\n\n鉁� Corriente el茅ctrica y agua potable disponible.\n\n鉁� 3 tajamares + pozo con bomba de agua.\n\n鉁� Naciente natural de agua en el terreno.\n\n馃尶 Entorno y extras:\n\n馃寗 Vista panor谩mica al cerro.\n\n鈿� Campo de f煤tbol.\n\n馃彨 Escuela ubicada al costado del terreno.\n\n馃尦 Amplios espacios naturales, ideales para disfrute y recreaci贸n.\n\n馃搶 Ideal para:\n\nInversi贸n a largo plazo\n\nQuinta familiar de fin de semana\n\nTurismo rural o ecol贸gico\n\nEmprendimiento agropecuario o recreativo\n\nProyecto de loteamiento futuro\n\n馃摓 隆Consult谩 precio y coordin谩 tu visita! Oportunidad con infraestructura lista y ubicaci贸n privilegiada.\n\n",
       "estado": "disponible",
       "destacado": false,
       "fechaCreacion": "2026-01-15T15:28:42.970Z",
@@ -117,12 +187,12 @@
     },
     {
       "id": "t1768490412585oqi29zhl3",
-      "titulo": "¡HERMOSA CASA EN VENTA – LUQUE ISLA BOGADO!",
+      "titulo": "隆HERMOSA CASA EN VENTA 鈥� LUQUE ISLA BOGADO!",
       "ubicacion": "Luque",
       "precio": "900000000",
       "moneda": "Gs.",
-      "tamaño": "360",
-      "descripcion": "HERMOSA CASA EN VENTA – LUQUE ISLA BOGADO\n📍 Ubicación: Zona Policía Montada, lugar elevado, seguro y sin riesgo de inundaciones.\n\n📐 Terreno: 12 x 30 m (360 m²)\n🏠 Construcción: 225 m²\n💰 Precio: Gs. 900.000.000\n\n🛏️ Distribución:\n4 dormitorios (1 en suite con baño privado)\n\n4 baños en total\n\nCocina amoblada\n\nSala amplia\n\nCochera techada para 4 vehículos\n\n✅ Características y Amenidades:\n✅ Patio y balcones\n\n✅ Materiales de primera calidad\n\n✅ Muralla perimetral\n\n✅ Ventanas con vidrios BLINDEX\n\n✅ Documentación en regla (título al día)\n\n✨ Ideal para familia que busca seguridad, espacio y comodidad en una zona alta y tranquila de Luque.\n📞 ¡Contactar para visitas y más información!",
+      "tama帽o": "360",
+      "descripcion": "HERMOSA CASA EN VENTA 鈥� LUQUE ISLA BOGADO\n馃搷 Ubicaci贸n: Zona Polic铆a Montada, lugar elevado, seguro y sin riesgo de inundaciones.\n\n馃搻 Terreno: 12 x 30 m (360 m虏)\n馃彔 Construcci贸n: 225 m虏\n馃挵 Precio: Gs. 900.000.000\n\n馃洀锔� Distribuci贸n:\n4 dormitorios (1 en suite con ba帽o privado)\n\n4 ba帽os en total\n\nCocina amoblada\n\nSala amplia\n\nCochera techada para 4 veh铆culos\n\n鉁� Caracter铆sticas y Amenidades:\n鉁� Patio y balcones\n\n鉁� Materiales de primera calidad\n\n鉁� Muralla perimetral\n\n鉁� Ventanas con vidrios BLINDEX\n\n鉁� Documentaci贸n en regla (t铆tulo al d铆a)\n\n鉁� Ideal para familia que busca seguridad, espacio y comodidad en una zona alta y tranquila de Luque.\n馃摓 隆Contactar para visitas y m谩s informaci贸n!",
       "estado": "disponible",
       "destacado": false,
       "fechaCreacion": "2026-01-15T15:20:12.585Z",
@@ -142,6 +212,93 @@
           "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1768562105/terrenos_py/f7mizyo575j5ozn2fosb.jpg"
         },
         {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1768562106/terrenos_py/w0ewgelu7t8wzjemkada.jpg"
+        },
+        {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1768562108/terrenos_py/rq4rs371xdeyuoit8x47.jpg"
+        },
+        {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1768562110/terrenos_py/ohd83vtoqvrhwc0m2ryd.jpg"
+        }
+      ]
+    },
+    {
+      "id": "t1768489971318mx69c7jvr",
+      "titulo": "VENDO 鈥� Belleza de Casa Quinta en Caacup茅 馃尨馃尦馃悗馃",
+      "ubicacion": "Base del Cerro Kavaju, C帽ia. Almada 鈥� a solo 400 mts de la Ruta Caacup茅鈥揟obat铆.",
+      "precio": "150000",
+      "moneda": "USD",
+      "tama帽o": "24000",
+      "descripcion": "馃彙 BELLEZA DE CASA QUINTA EN CAACUP脡\n馃搷 Ubicaci贸n: Base del Cerro Kavaju, C帽ia. Almada 鈥� a solo 400 m de la Ruta Caacup茅鈥揟obat铆.\n\n馃搻 Terreno: 2,4 hect谩reas\n馃挷 Precio: USD 150.000 鈥� listo para transferir\n\n鉁� Documentaci贸n al d铆a 鈥� t铆tulo, impuestos e inscripci贸n georreferencial en regla.\n\n馃彔 Casa Principal (205,35 m虏)\n2 dormitorios (1 en suite)\n\n2 ba帽os\n\nSala, cocina y comedor integrados\n\nChimenea incorporada\n\n馃彙 Casa de Hu茅spedes (63,05 m虏)\n3 dormitorios\n\n1 ba帽o\n\nCocina-comedor con hall\n\n鉁� COMODIDADES Y EXTRAS:\n鉁� Pozo artesiano de 130 m (agua cristalina)\n\n鉁� Piscina de 25.000 L con filtrado autom谩tico\n\n鉁� Tatacu谩 tradicional\n\n鉁� Cerco perimetral completo\n\n鉁� Electricidad subterr谩nea con transformador propio\n\n鉁� CCTV con c谩maras de seguridad\n\n鉁� Iluminaci贸n domotizada en casa principal\n\n鉁� Amplia vegetaci贸n con 谩rboles nativos y frutales\n\n鉁� Ideal para uso residencial, tur铆stico o proyecto ecotur铆stico\n馃摓 Contacta para m谩s informaci贸n y coordinaci贸n de visita.",
+      "estado": "disponible",
+      "destacado": false,
+      "fechaCreacion": "2026-01-15T15:12:51.318Z",
+      "fechaActualizacion": "2026-01-16T11:33:14.359Z",
+      "imagenes": [
+        "https://res.cloudinary.com/daqgezuva/image/upload/v1768562521/terrenos_py/zbxadedixjb0weplxcpp.jpg",
+        "https://res.cloudinary.com/daqgezuva/image/upload/v1768562522/terrenos_py/q390qlj5bzv1erblp88s.jpg",
+        "https://res.cloudinary.com/daqgezuva/image/upload/v1768562523/terrenos_py/sabfhve7uo19cfemcgwm.jpg",
+        "https://res.cloudinary.com/daqgezuva/image/upload/v1768562524/terrenos_py/q35iz0b0ovypc30juzfm.jpg",
+        "https://res.cloudinary.com/daqgezuva/image/upload/v1768562525/terrenos_py/zunsg4iuw2hey91wvzy2.jpg",
+        "https://res.cloudinary.com/daqgezuva/image/upload/v1768562526/terrenos_py/xxwxr9vsnh95uczhkjgx.jpg",
+        "https://res.cloudinary.com/daqgezuva/image/upload/v1768562528/terrenos_py/saozltvhbcttlpckg0ny.jpg",
+        "https://res.cloudinary.com/daqgezuva/image/upload/v1768562529/terrenos_py/of0de0e945h5qg1wqnjx.jpg",
+        "https://res.cloudinary.com/daqgezuva/image/upload/v1768562530/terrenos_py/mhso52lf7nakhcrmqts4.jpg"
+      ],
+      "email": "infoinmueblespy@gmail.com",
+      "telefono": "+595985282935",
+      "mapaUrl": "https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d8998.63956108798!2d-57.13235063278788!3d-25.30520036019313!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1s%20Base%20del%20Cerro%20Kavaju%2C%20C%C3%B1ia.%20Almada!5e1!3m2!1ses!2spy!4v1768563168832!5m2!1ses!2spy",
+      "media": [
+        {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1768562521/terrenos_py/zbxadedixjb0weplxcpp.jpg"
+        },
+        {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1768562522/terrenos_py/q390qlj5bzv1erblp88s.jpg"
+        },
+        {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1768562523/terrenos_py/sabfhve7uo19cfemcgwm.jpg"
+        },
+        {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1768562524/terrenos_py/q35iz0b0ovypc30juzfm.jpg"
+        },
+        {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1768562525/terrenos_py/zunsg4iuw2hey91wvzy2.jpg"
+        },
+        {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1768562526/terrenos_py/xxwxr9vsnh95uczhkjgx.jpg"
+        },
+        {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1768562528/terrenos_py/saozltvhbcttlpckg0ny.jpg"
+        },
+        {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1768562529/terrenos_py/of0de0e945h5qg1wqnjx.jpg"
+        },
+        {
+          "type": "image",
+          "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1768562530/terrenos_py/mhso52lf7nakhcrmqts4.jpg"
+        }
+      ]
+    },
+    {
+      "id": "t17684824427501ggsjfvqi",
+      "titulo": "馃彙 EN VENTA 鈥� IMPORTANTE PROPIEDAD SOBRE RUTA INTERNACIONAL",
+      "ubicacion": "Barrio San Pedro 鈥� Municipio de Guayaib铆, Dpto. San Pedro",
+      "precio": "850000000",
+      "moneda": "Gs.",
+      "tama帽o": "840",
+      "descripcion": "Se vende importante propiedad sobre ruta internacional en Barrio San Pedro, Municipio de Guayaib铆, Dpto. San Pedro, en zona urbana de alto tr谩nsito y conectividad. El inmueble cuenta con un amplio terreno de 5 hect谩reas 840 m虏, con t铆tulo al d铆a y documentaci贸n en regla. Posee una c贸moda casa tipo chalet con 3 dormitorios, cocina, sala, lavadero y 120 m虏 cubiertos. Ideal para vivienda familiar, emprendimiento comercial, loteamiento o inversi贸n, gracias a su estrat茅gica ubicaci贸n sobre ruta internacional y gran extensi贸n de terreno. Una oportunidad 煤nica con gran potencial de valorizaci贸n.\nPrecio: Gs. 850.000.000",
+      "estado": "di        {
           "type": "image",
           "url": "https://res.cloudinary.com/daqgezuva/image/upload/v1768562106/terrenos_py/w0ewgelu7t8wzjemkada.jpg"
         },
